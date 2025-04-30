@@ -75,7 +75,7 @@ class Waveform
         $waveform = null;
 
         if ($media->isNew() === false) {
-            if (AmpConfig::get('album_art_store_disk')) {
+            if (make_bool(AmpConfig::get('waveform_store_disk'))) {
                 $waveform = self::get_from_file($media->id, $object_type);
             } else {
                 $media->format();
@@ -145,7 +145,7 @@ class Waveform
                 }
 
                 if (!empty($waveform)) {
-                    if (AmpConfig::get('album_art_store_disk')) {
+                    if (AmpConfig::get('waveform_store_disk')) {
                         self::save_to_file($media->id, $object_type, $waveform);
                     } else {
                         self::save_to_db($media->id, $object_type, $waveform);
