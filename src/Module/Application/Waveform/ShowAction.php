@@ -76,6 +76,7 @@ final class ShowAction implements ApplicationActionInterface
         // This to allow other pages from the same session to be processed
         // Warning: Do not change any session variable after this call
         session_write_close();
+
         if (array_key_exists('podcast_episode', $_REQUEST)) {
             $object_id   = (int)$this->requestParser->getFromRequest('podcast_episode');
             $object_type = 'podcast_episode';
