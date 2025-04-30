@@ -1220,7 +1220,7 @@ transcode_mp3 = "allowed"
 ; Override the default TYPE transcoding behavior on a per-player basis, for example,
 ; to stream lossless using the api and lossy using the web interface.
 ; transcode_player_PLAYER_TYPE = TYPE
-; Valid PLAYER is: webplayer, api
+; Valid PLAYER is: api, waveformgen, webplayer
 ; DEFAULT: none
 ;transcode_player_webplayer_m4a = "required"
 ;transcode_player_webplayer_flac = "required"
