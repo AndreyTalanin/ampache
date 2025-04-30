@@ -124,7 +124,7 @@ a:focus {
 }
 
 .jp-audio .jp-type-playlist .jp-interface {
-    height: 70px;
+    height: 90px;
 }
 
 .jp-audio-stream .jp-type-single .jp-interface {
@@ -595,7 +595,7 @@ a.jp-volume-max:hover {
 
 .waveform {
     position: absolute;
-    top: 50px;
+    top: 55px;
     left: 40px;
     height: 32px;
     visibility: hidden;
