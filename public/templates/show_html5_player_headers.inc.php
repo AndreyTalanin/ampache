@@ -28,12 +28,14 @@ $jpinterface = ($isLight)
 $jpplaylist = ($isLight)
     ? '#d4d4d4'
     : '#202020';
+?>
 
-if ($iframed || $isShare) { ?>
-    <link rel="stylesheet" href="<?php echo $web_path . Ui::find_template('jplayer.midnight.black-iframed.css', true); ?>" type="text/css">
+<?php if ($iframed || $isShare) { ?>
+    <link rel="stylesheet" href="<?php echo $web_path . Ui::find_template($isLight ? 'jplayer.midnight.black-iframed.css' : 'jplayer.ampache.black-iframed.css', true); ?>" type="text/css">
 <?php } else { ?>
-    <link rel="stylesheet" href="<?php echo $web_path . Ui::find_template('jplayer.midnight.black.css', true); ?>" type="text/css">
+    <link rel="stylesheet" href="<?php echo $web_path . Ui::find_template($isLight ? 'jplayer.midnight.black.css' : 'jplayer.ampache.black.css', true); ?>" type="text/css">
 <?php } ?>
+
 <?php if (!$iframed) { ?>
     <link rel="stylesheet" href="<?php echo $web_path . Ui::find_template('jquery-editdialog.css', true); ?>" type="text/css" media="screen">
     <link rel="stylesheet" href="<?php echo $web_path; ?>/lib/modules/jquery-ui-ampache/jquery-ui.min.css" type="text/css" media="screen">
