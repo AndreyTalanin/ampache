@@ -334,6 +334,11 @@ class WebPlayer
                 $json['r128_album_gain']       = $media->r128_album_gain;
                 $json['duration']              = $media->time;
 
+                // get a flag indicating whether playback should start from this item
+                if (!empty($url_data['custom_play_initial_position']) && make_bool($url_data['custom_play_initial_position'])) {
+                    $json['custom_play_initial_position'] = true;
+                }
+
                 // this should probably only be in songs todo i think this should be removed...
                 //if ($media->type != $types['real']) {
                 //    $pos = strrpos($url, '&');
