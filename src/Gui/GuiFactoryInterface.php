@@ -28,6 +28,7 @@ use Ampache\Gui\AlbumDisk\AlbumDiskViewAdapterInterface;
 use Ampache\Gui\Catalog\CatalogDetailsInterface;
 use Ampache\Gui\Playlist\NewPlaylistDialogAdapterInterface;
 use Ampache\Gui\Playlist\PlaylistViewAdapterInterface;
+use Ampache\Gui\Song\SongDirectplayOptionsViewAdapterInterface;
 use Ampache\Gui\Song\SongViewAdapterInterface;
 use Ampache\Gui\Stats\CatalogStatsInterface;
 use Ampache\Gui\Stats\StatsViewAdapterInterface;
@@ -47,6 +48,16 @@ interface GuiFactoryInterface
         GuiGatekeeperInterface $gatekeeper,
         Song $song
     ): SongViewAdapterInterface;
+
+    public function createSongBrowsedViewAdapter(
+        GuiGatekeeperInterface $gatekeeper,
+        Browse $browse,
+        Song $song
+    ): SongViewAdapterInterface;
+
+    public function createSongDirectplayOptionsViewAdapter(): SongDirectplayOptionsViewAdapterInterface;
+
+    public function createSongBrowsedDirectplayOptionsViewAdapter(?Browse $browse): SongDirectplayOptionsViewAdapterInterface;
 
     public function createAlbumViewAdapter(
         GuiGatekeeperInterface $gatekeeper,
