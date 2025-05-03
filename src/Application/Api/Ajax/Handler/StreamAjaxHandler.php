@@ -95,6 +95,16 @@ final readonly class StreamAjaxHandler implements AjaxHandlerInterface
                 if (InterfaceImplementationChecker::is_playable_item($object_type)) {
                     $web_path                     = AmpConfig::get_web_path();
                     $_SESSION['iframe']['target'] = $web_path . '/stream.php?action=play_item&object_type=' . $object_type . '&object_id=' . $object_id;
+
+                    if (array_key_exists('subobject_type', $_REQUEST) && array_key_exists('subobject_id', $_REQUEST)) {
+                        $_SESSION['iframe']['target'] .= '&subobject_type=' . $_REQUEST['subobject_type'];
+                        $_SESSION['iframe']['target'] .= '&subobject_id=' . $_REQUEST['subobject_id'];
+
+                        if (array_key_exists('subobject_number', $_REQUEST)) {
+                            $_SESSION['iframe']['target'] .= '&subobject_number=' . $_REQUEST['subobject_number'];
+                        }
+                    }
+
                     if (array_key_exists('custom_play_action', $_REQUEST)) {
                         $_SESSION['iframe']['target'] .= '&custom_play_action=' . $_REQUEST['custom_play_action'];
                     }
