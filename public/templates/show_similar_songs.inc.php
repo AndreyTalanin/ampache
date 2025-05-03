@@ -106,6 +106,7 @@ foreach ($object_ids as $song_id) {
                 ->setContext('USER_IS_REGISTERED', User::is_registered())
                 ->setContext('USING_RATINGS', User::is_registered() && (AmpConfig::get('ratings')))
                 ->setContext('SONG', $guiFactory->createSongViewAdapter($gatekeeper, $libitem))
+                ->setContext('SONG_DIRECTPLAY_OPTIONS', $guiFactory->createSongDirectplayOptionsViewAdapter())
                 ->setContext('CONFIG', $guiFactory->createConfigViewAdapter())
                 ->setContext('ARGUMENT_PARAM', '')
                 ->setContext('IS_TABLE_VIEW', $is_table)
