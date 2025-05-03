@@ -1,5 +1,6 @@
 .fleet/
 .idea/
+.vs/
 .settings/
 .tx/config_*.bak
 .vscode/
