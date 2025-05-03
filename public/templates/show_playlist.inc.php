@@ -164,12 +164,14 @@ if (Access::check_function(AccessFunctionEnum::FUNCTION_BATCH_DOWNLOAD) && $zipH
 <?php Ui::show_box_bottom(); ?>
 <div id='reordered_list_<?php echo $playlist->id; ?>'>
 <?php
-    $browse = new Browse();
+$browse = new Browse();
 $browse->set_type('playlist_media');
 $browse->set_use_filters(false);
 $browse->add_supplemental_object('playlist', $playlist->id);
+$browse->set_container('playlist', $playlist->id);
 $browse->set_static_content(true);
 $browse->duration = Search::get_total_duration($object_ids);
 $browse->show_objects($object_ids, true);
-$browse->store(); ?>
+$browse->store();
+?>
 </div>
