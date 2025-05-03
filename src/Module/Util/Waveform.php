@@ -75,8 +75,13 @@ class Waveform
         $waveform = null;
 
         if ($media->isNew() === false) {
-            if (AmpConfig::get('album_art_store_disk')) {
-                $waveform = self::get_from_file($media->id, $object_type);
+            if (make_bool(AmpConfig::get('waveform_store_disk'))) {
+                $waveform_color_use_themes = make_bool(AmpConfig::get('waveform_color_use_themes'));
+                
+                $theme_name  = $waveform_color_use_themes ? (string)AmpConfig::get('theme_name', 'reborn') : null;
+                $theme_color = $waveform_color_use_themes ? (string)AmpConfig::get('theme_color', 'dark') : null;
+
+                $waveform = self::get_from_file($media->id, $object_type, $theme_name, $theme_color);
             } else {
                 $media->format();
                 $waveform = $media->waveform;
@@ -145,8 +150,8 @@ class Waveform
                 }
 
                 if (!empty($waveform)) {
-                    if (AmpConfig::get('album_art_store_disk')) {
-                        self::save_to_file($media->id, $object_type, $waveform);
+                    if (AmpConfig::get('waveform_store_disk')) {
+                        self::save_to_file($media->id, $object_type, $waveform, $theme_name, $theme_color);
                     } else {
                         self::save_to_db($media->id, $object_type, $waveform);
                     }
@@ -160,7 +165,7 @@ class Waveform
     /**
      * Return full path of the Waveform file.
      */
-    public static function get_filepath(int $object_id, string $object_type): ?string
+    public static function get_filepath(int $object_id, string $object_type, ?string $theme_name = null, ?string $theme_color = null): ?string
     {
         $path = AmpConfig::get('local_metadata_dir');
         if (!$path) {
@@ -171,26 +176,31 @@ class Waveform
         // Create subdirectory based on the 2 last digit of the Song Id. We prevent having thousands of file in one directory.
         $dir1 = substr((string)$object_id, -1, 1);
         $dir2 = substr((string)$object_id, -2, 1);
-        $path .= "/waveform/" . $object_type . '/' . $dir1 . '/' . $dir2 . "/";
+        $path .= '/waveform/' . $object_type . '/' . $dir1 . '/' . $dir2 . '/';
         if (!file_exists($path)) {
             mkdir($path, 0755, true);
         }
-        $old_target_file = $path . "/waveform/" . $dir1 . '/' . $dir2 . "/" . $object_id . ".png";
+
+        $file_name = !empty($theme_name) && !empty($theme_color)
+            ? $object_id . '_' . $theme_name . '_' . $theme_color . '.png'
+            : $object_id . '.png';
+
+        $old_target_file = $path . '/waveform/' . $dir1 . '/' . $dir2 . '/' . $file_name;
         // move the song waveforms to the right place if they're in the old path
         if ($object_type == 'song' && is_file($old_target_file)) {
-            rename($old_target_file, $path . $object_id . ".png");
-            debug_event(self::class, 'Moved: ' . $object_id . ' from: {' . $old_target_file . '}' . ' to: {' . $path . $object_id . ".png" . '}', 5);
+            rename($old_target_file, $path . $file_name);
+            debug_event(self::class, 'Moved: ' . $object_id . ' from: {' . $old_target_file . '}' . ' to: {' . $path . $file_name . '}', 5);
         }
 
-        return $path . $object_id . ".png";
+        return $path . $file_name;
     }
 
     /**
      * Return content of a Waveform file.
      */
-    public static function get_from_file(int $object_id, string $object_type): ?string
+    public static function get_from_file(int $object_id, string $object_type, ?string $theme_name = null, ?string $theme_color = null): ?string
     {
-        $file = self::get_filepath($object_id, $object_type);
+        $file = self::get_filepath($object_id, $object_type, $theme_name, $theme_color);
         if (!empty($file) && file_exists($file)) {
             debug_event(self::class, 'get_from_file ' . $file, 5);
             $waveform = file_get_contents($file);
@@ -206,9 +216,9 @@ class Waveform
     /**
      * Save content of a Waveform into a file.
      */
-    public static function save_to_file(int $object_id, string $object_type, string $waveform): void
+    public static function save_to_file(int $object_id, string $object_type, string $waveform, ?string $theme_name = null, ?string $theme_color = null): void
     {
-        $file = self::get_filepath($object_id, $object_type);
+        $file = self::get_filepath($object_id, $object_type, $theme_name, $theme_color);
         if (!empty($file)) {
             file_put_contents($file, $waveform);
         }
@@ -267,6 +277,15 @@ class Waveform
         $height     = (int)AmpConfig::get('waveform_height', 32);
         $foreground = (string)AmpConfig::get('waveform_color', '#FF0000');
         $draw_flat  = (bool)AmpConfig::get('waveform_drawflat', true);
+
+        if (make_bool(AmpConfig::get('waveform_store_disk')) && make_bool(AmpConfig::get('waveform_color_use_themes'))) {
+            $theme_name  = (string)AmpConfig::get('theme_name', 'reborn');
+            $theme_color = (string)AmpConfig::get('theme_color', 'dark');
+
+            $waveform_color_override_config_name = 'waveform_color_override_' . $theme_name . '_' . $theme_color;
+
+            $foreground = (string)AmpConfig::get($waveform_color_override_config_name, $foreground);
+        }
 
         // generate foreground color
         list($red, $green, $blue) = self::html2rgb($foreground);
