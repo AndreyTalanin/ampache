@@ -69,7 +69,37 @@ if (!isset($libitem->enabled) || $libitem->enabled || Access::check(AccessTypeEn
     <div class="cel_play_hover">
     <?php
     if (AmpConfig::get('directplay')) {
-        echo Ajax::button('?page=stream&action=directplay&object_type=' . $object_type . '&object_id=' . $libitem->getId(), 'play_circle', $t_play, 'play_playlist_' . $object_type . '_' . $libitem->getId());
+        $play_one_action = '?page=stream&action=directplay&object_type=' . $object_type . '&object_id=' . $libitem->getId();
+        $play_one_source = 'play_playlist_' . $object_type . '_' . $libitem->getId();
+        echo Ajax::button(
+            $play_one_action,
+            'counter_1', // TODO: Figure out better icons?
+            $t_play_one,
+            $play_one_source,
+        );
+
+        if (!empty($browse) && $browse->is_container_set()) {
+            $browse_container_type = $browse->get_container_type();
+            $browse_container_id = $browse->get_container_id();
+
+            $play_sequentially_action = '?page=stream&action=directplay';
+            $play_sequentially_action .= '&object_type=' . $browse_container_type . '&object_id=' . $browse_container_id;
+            $play_sequentially_action .= '&subobject_type=' . $object_type . '&subobject_id=' . $libitem->getId();
+
+            if ($browse->is_container_numbered()) {
+                $play_sequentially_action .= '&subobject_number=' . $playlist_track;
+            }
+
+            $play_sequentially_source = 'play_playlist_' . $object_type . '_' . $libitem->getId() . '_track_' . $playlist_track . '_sequential_mode';
+
+            echo Ajax::button(
+                $play_sequentially_action,
+                'play_circle', // TODO: Figure out better icons?
+                $t_play_sequentially,
+                $play_sequentially_source,
+            );
+        }
+
         if (Stream_Playlist::check_autoplay_next()) {
             echo Ajax::button('?page=stream&action=directplay&object_type=' . $object_type . '&object_id=' . $libitem->getId() . '&playnext=true', 'menu_open', $t_play_next, 'nextplay_' . $object_type . '_' . $libitem->getId());
         }
