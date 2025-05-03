@@ -39,6 +39,8 @@ interface SongViewAdapterInterface
 
     public function canAppendNext(): bool;
 
+    public function getDirectplaySequentialModeButton(): string;
+
     public function getDirectplayButton(): string;
 
     public function getAutoplayNextButton(): string;
