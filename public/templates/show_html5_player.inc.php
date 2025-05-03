@@ -370,6 +370,27 @@ if (AmpConfig::get('song_page_title') && $isShare === false) {
         replaygainNode = null;
         replaygainEnabled = false;
         <?php echo WebPlayer::add_media_js($playlist); ?>
+        
+        function isCustomPlayInitialPosition(media) {
+            return media['custom_play_initial_position']; // checks that value is convertible to boolean
+        }
+
+        var customPlayInitialPositionIndex = jplaylist.playlist.findIndex(isCustomPlayInitialPosition);
+        if (customPlayInitialPositionIndex > -1) {
+            console.log('custom play initial position is specified:', customPlayInitialPositionIndex, '(zero-based)');
+        }
+
+        // use a 500 ms timeout to allow the player to process added media
+        setTimeout(() => {
+            var playInitialPositionIndex = customPlayInitialPositionIndex > -1 ? customPlayInitialPositionIndex : 0;
+            <?php if ($autoplay) { ?>
+            console.log('starting playback from position', playInitialPositionIndex, '(zero-based)');
+            jplaylist.play(playInitialPositionIndex);
+            <?php } else { ?>
+            console.log('setting current playlist position as', playInitialPositionIndex, '(zero-based)');
+            jplaylist.select(playInitialPositionIndex);
+            <?php } ?>
+        }, 500);
 
         $("#jquery_jplayer_1").resizable({
             alsoResize: "#jquery_jplayer_1 video",
@@ -379,6 +400,8 @@ if (AmpConfig::get('song_page_title') && $isShare === false) {
         $("#jquery_jplayer_1 video").resizable();
 
         $("#jquery_jplayer_1").draggable();
+
+        console.log('finished initializing the web player');
     });
 </script>
 <?php // Load Aurora.js scripts
