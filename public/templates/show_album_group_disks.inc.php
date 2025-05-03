@@ -334,17 +334,19 @@ foreach ($album->getDisks() as $album_disk) {
         <?php } ?>
     </div>
     <div id='reordered_list_<?php echo $album_disk->id; ?>'>
-        <?php
-        $browse = new Browse();
+    <?php
+    $browse = new Browse();
     $browse->set_show_header(false);
     $browse->set_type('song');
     $browse->set_simple_browse(true);
     $browse->set_skip_catalog_check(true);
     $browse->set_sort('track', 'ASC');
     $browse->set_filter('album_disk', $album_disk->id);
+    $browse->set_container('album', $album->id);
     $browse->get_objects();
     $browse->show_objects([], ['hide' => $hide_array]);
-    $browse->store(); ?>
+    $browse->store();
+    ?>
     </div><br />
     <?php
 } ?>
