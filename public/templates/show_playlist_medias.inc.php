@@ -63,23 +63,26 @@ $t_time     = T_('Time');
 $t_rating   = T_('Rating');
 $t_action   = T_('Action');
 // don't translate media row text for every row
-$t_play        = T_('Play');
-$t_play_next   = T_('Play next');
-$t_play_last   = T_('Play last');
-$t_add_to_temp = T_('Add to Temporary Playlist');
-$t_add_to_list = T_('Add to playlist');
-$t_download    = T_('Download');
-$t_delete      = T_('Delete');
-$t_reorder     = T_('Reorder');
+$t_play              = T_('Play');
+$t_play_one          = T_('Play one'); // TODO: Find and add translations?
+$t_play_sequentially = T_('Play sequentially'); // TODO: Find and add translations?
+$t_play_next         = T_('Play next');
+$t_play_last         = T_('Play last');
+$t_add_to_temp       = T_('Add to Temporary Playlist');
+$t_add_to_list       = T_('Add to playlist');
+$t_download          = T_('Download');
+$t_delete            = T_('Delete');
+$t_reorder           = T_('Reorder');
 if ($browse->is_show_header()) {
     require Ui::find_template('list_header.inc.php');
     echo '<span class="item-duration">' . '| ' . $t_duration . ': ' . $duration . '</span>';
-} ?>
+}
+?>
     <form method="post" id="reorder_playlist_<?php echo $playlist_id; ?>">
         <table id="reorder_playlist_table" class="tabledata striped-rows <?php echo $css_class; ?>" data-objecttype="media" data-offset="<?php echo $browse->get_start(); ?>">
             <thead>
             <tr class="th-top">
-                <th class="cel_play essential"></th>
+                <th class="cel_play essential">#</th>
                 <th class="<?php echo $cel_cover; ?> optional"><?php echo $t_art; ?></th>
                 <th class="cel_title essential persist"><?php echo $t_title; ?></th>
                 <?php if ($show_parent) { ?>
