@@ -130,6 +130,7 @@ final class RefreshUpdatedAction extends AbstractEditAction
                         ->setContext('USER_IS_REGISTERED', true)
                         ->setContext('USING_RATINGS', $show_ratings)
                         ->setContext('SONG', $this->guiFactory->createSongViewAdapter($gatekeeper, $libitem))
+                        ->setContext('SONG_DIRECTPLAY_OPTIONS', $this->guiFactory->createSongDirectplayOptionsViewAdapter())
                         ->setContext('CONFIG', $this->guiFactory->createConfigViewAdapter())
                         ->setContext('ARGUMENT_PARAM', $argument_param)
                         ->setContext('IS_TABLE_VIEW', true)
