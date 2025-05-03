@@ -86,16 +86,16 @@ $replaygain = (AmpConfig::get('theme_color', 'dark') == 'light')
             cssSelectorAncestor: "#jp_container_1"
         }, [], {
             playlistOptions: {
-                autoPlay: <?php echo ($autoplay) ? 'true' : 'false'; ?>,
+                autoPlay: false, // playback is started manually after adding media
                 removePlayed: <?php echo ($removePlayed) ? 'true' : 'false'; ?>, // remove tracks before the current playlist item
                 removeCount: <?php echo $removeCount; ?>, // shift the index back to keep x items BEFORE the current index
                 loopBack: false, // repeat a finished playlist from the start
                 shuffleOnLoop: false,
                 enableRemoveControls: true,
-                displayTime: 'slow',
-                addTime: 'fast',
-                removeTime: 'fast',
-                shuffleTime: 'slow'
+                addTime: 0,
+                removeTime: 0,
+                displayTime: 0,
+                shuffleTime: 0
             },
             swfPath: "<?php echo $web_path; ?>/lib/modules/jplayer",
             preload: 'auto',
