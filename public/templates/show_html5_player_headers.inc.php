@@ -86,6 +86,11 @@ $jpplaylist = ($isLight)
         jpmedia['r128_album_gain'] = media['r128_album_gain'];
         jpmedia['duration'] = media['duration'];
 
+        // Additional boolean property to start playback from a custom position.
+        if (media['custom_play_initial_position']) {
+            jpmedia['custom_play_initial_position'] = true;
+        }
+
         return jpmedia;
     }
 
