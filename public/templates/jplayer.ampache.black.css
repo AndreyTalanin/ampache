@@ -2,7 +2,10 @@
  * Skin for jPlayer Plugin (jQuery JavaScript Library)
  * http://www.jplayer.org
  *
- * Skin Name: Midnight Black
+ * Skin Name: Ampache Black
+ * Created by AndreyTalanin (andrey.talanin@outlook.com) under the MIT & GPL licenses.
+ * This skin is almost 100% copied from Midnight Black.
+ * All credits for the original one are below.
  *
  * Copyright (c) 2010-2012 Happyworm Ltd
  * Dual licensed under the MIT and GPL licenses.
@@ -209,7 +212,7 @@ a.jp-shuffle,
 a.jp-shuffle:hover,
 a.jp-shuffle-off,
 a.jp-shuffle-off:hover {
-    background: url("../lib/modules/jquery-jplayer-midnight-black/jplayer.midnight.black.png") no-repeat;
+    background: url("../lib/modules/jquery-jplayer-ampache-black/jplayer.ampache.black.png") no-repeat;
 }
 
 a.jp-play {
@@ -324,7 +327,9 @@ a.jp-next:hover {
 /* The seeking class is added/removed inside jPlayer */
 
 .jp-seeking-bg {
-    background: url("../lib/modules/jquery-jplayer-midnight-black/jplayer.midnight.black.seeking.gif");
+    background: none;
+    /* background: url("../lib/modules/jquery-jplayer-ampache-black/jplayer.ampache.black.seeking.gif"); */
+    /* Removed to support the native Ampache theme color instead of jplayer one. */
 }
 
 /* @end */
@@ -659,12 +664,12 @@ a.jp-video-play-icon {
     margin-top: -50px;
     left: 50%;
     top: 50%;
-    background: url("../lib/modules/jquery-jplayer-midnight-black/jplayer.midnight.black.video.play.png") 0 0 no-repeat;
+    background: url("../lib/modules/jquery-jplayer-ampache-black/jplayer.ampache.black.video.play.png") 0 0 no-repeat;
     text-indent: -9999px;
 }
 
 .jp-video-play:hover a.jp-video-play-icon {
-    background: url("../lib/modules/jquery-jplayer-midnight-black/jplayer.midnight.black.video.play.png") 0 -100px no-repeat;
+    background: url("../lib/modules/jquery-jplayer-ampache-black/jplayer.ampache.black.video.play.png") 0 -100px no-repeat;
 }
 
 .jp-jplayer audio,
