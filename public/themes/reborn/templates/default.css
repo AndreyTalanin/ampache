@@ -383,7 +383,7 @@ div#autoupdate > span {
 
 #loginInfo {
     position: absolute;
-    left: 80px;
+    left: 74px; /* 5px header padding + 64px logo size + 5px offset */
 }
 
 #sb_Subsearch input[type=submit] {
