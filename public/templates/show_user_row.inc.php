@@ -45,13 +45,20 @@ use Ampache\Module\Util\Ui;
 /** @var string $t_disable */
 /** @var string $t_delete */
 ?>
+
+<?php
+$username = scrub_out($libitem->username);
+if ($libitem->fullname_public || Access::check(AccessTypeEnum::INTERFACE, AccessLevelEnum::ADMIN)) {
+    $username .= ' (' . scrub_out($libitem->fullname) . ')';
+}
+?>
+
 <td class="cel_username">
     <a href="<?php echo $web_path; ?>/stats.php?action=show_user&user_id=<?php echo $libitem->id; ?>">
-            <?php echo $libitem->get_f_avatar('f_avatar_mini');
-echo scrub_out($libitem->username);
-if ($libitem->fullname_public || Access::check(AccessTypeEnum::INTERFACE, AccessLevelEnum::ADMIN)) {
-    echo " (" . scrub_out($libitem->fullname) . ")";
-} ?>
+        <div style="display: inline-block; vertical-align: middle; line-height: 0;">
+            <?php echo $libitem->get_f_avatar('f_avatar_mini'); ?>
+        </div>
+        <span><?php echo $username; ?></span>
     </a>
 </td>
 <td class="cel_lastseen"><?php echo $last_seen; ?></td>
