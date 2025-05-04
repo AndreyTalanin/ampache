@@ -880,6 +880,11 @@ class Art extends database_object
 
         // Create a new blank image of the correct size
         $thumbnail = imagecreatetruecolor((int) $size['width'], (int) $size['height']);
+        
+        if ($type == 'png') {
+            imagealphablending($thumbnail, false);
+            imagesavealpha($thumbnail, true);
+        }
 
         if ($source_size['width'] > $source_size['height']) {
             // landscape
@@ -901,7 +906,18 @@ class Art extends database_object
             $crop_y     = 0;
         }
 
-        if (!imagecopyresampled($thumbnail, $source, 0, 0, (int)$crop_x, (int)$crop_y, (int)$new_width, (int)$new_height, $source_size['width'], $source_size['height'])) {
+        if ($type == 'png') {
+            $transparent_color = imagecolorallocatealpha($thumbnail, 255, 255, 255, 127);
+            imagefilledrectangle($thumbnail, 0, 0, $new_width, $new_height, $transparent_color);
+        }
+
+        $copy_ok = imagecopyresampled(
+            $thumbnail, $source,
+            0, 0, (int)$crop_x, (int)$crop_y,
+            (int)$new_width, (int)$new_height,
+            $source_size['width'], $source_size['height']);
+
+        if (!$copy_ok) {
             debug_event(self::class, 'Unable to create resized image', 1);
             imagedestroy($source);
             imagedestroy($thumbnail);
