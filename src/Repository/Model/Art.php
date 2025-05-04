@@ -1028,7 +1028,11 @@ class Art extends database_object
             return [];
         }
 
+        $data = explode('/', (string) $mime);
+        $type = ((string)($data[1] ?? '') !== '') ? strtolower($data[1]) : 'jpg';
+
         $source = imagecreatefromstring($image);
+
         if (!$source) {
             debug_event(self::class, 'Failed to create Image from string - Source Image is damaged / malformed', 2);
 
@@ -1039,6 +1043,13 @@ class Art extends database_object
         $src_height = (int)imagesy($source);
         $dst_width  = (int)$size['width'];
         $dst_height = (int)$size['height'];
+
+        $thumbnail = imagecreatetruecolor($dst_width, $dst_height);
+        
+        if ($type == 'png') {
+            imagealphablending($thumbnail, false);
+            imagesavealpha($thumbnail, true);
+        }
 
         // Calculate aspect ratios
         $src_ratio  = $src_width / $src_height;
@@ -1067,9 +1078,17 @@ class Art extends database_object
             $src_y         = (int)($center_offset * 0.8);
         }
 
-        $thumbnail = imagecreatetruecolor($dst_width, $dst_height);
+        if ($type == 'png') {
+            $transparent_color = imagecolorallocatealpha($thumbnail, 255, 255, 255, 127);
+            imagefilledrectangle($thumbnail, 0, 0, $new_width, $new_height, $transparent_color);
+        }
 
-        if (!imagecopyresampled($thumbnail, $source, 0, 0, $src_x, $src_y, $dst_width, $dst_height, $new_width, $new_height)) {
+        $copy_ok = imagecopyresampled(
+            $thumbnail, $source,
+            0, 0, $src_x, $src_y,
+            $dst_width, $dst_height, $new_width, $new_height);
+
+        if (!$copy_ok) {
             debug_event(self::class, 'Unable to create resized image', 1);
             imagedestroy($source);
             imagedestroy($thumbnail);
@@ -1078,9 +1097,6 @@ class Art extends database_object
         }
 
         imagedestroy($source);
-
-        $data = explode('/', (string) $mime);
-        $type = ((string)($data[1] ?? '') !== '') ? strtolower($data[1]) : 'jpg';
 
         // Start output buffer
         ob_start();
