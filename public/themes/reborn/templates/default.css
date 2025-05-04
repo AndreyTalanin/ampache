@@ -384,7 +384,6 @@ div#autoupdate > span {
 #loginInfo {
     position: absolute;
     left: 80px;
-    top: 17px;
 }
 
 #sb_Subsearch input[type=submit] {
