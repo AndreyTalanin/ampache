@@ -55,7 +55,7 @@ if ($libitem->fullname_public || Access::check(AccessTypeEnum::INTERFACE, Access
 
 <td class="cel_username">
     <a href="<?php echo $web_path; ?>/stats.php?action=show_user&user_id=<?php echo $libitem->id; ?>">
-        <div style="display: inline-block; vertical-align: middle; line-height: 0;">
+        <div style="display: inline-block; vertical-align: middle; margin-right: 5px; line-height: 0;">
             <?php echo $libitem->get_f_avatar('f_avatar_mini'); ?>
         </div>
         <span><?php echo $username; ?></span>
