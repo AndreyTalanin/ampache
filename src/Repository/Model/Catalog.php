@@ -717,20 +717,61 @@ abstract class Catalog extends database_object
     /**
      * Get enable sql filter;
      */
-    public static function get_enable_filter(string $type, string $catalog_id): string
+    public static function get_enable_filter(string $type, string $object_id): string
     {
-        $sql = "";
-        if ($type == "song" || $type == "album" || $type == "artist" || $type == "album_artist") {
+        $select_count = "1";
+        if ($type == "song" || $type == "album") {
             if ($type == "song") {
                 $type = "id";
             }
 
-            $sql = "(SELECT COUNT(`song_dis`.`id`) FROM `song` AS `song_dis` LEFT JOIN `catalog` AS `catalog_dis` ON `catalog_dis`.`id` = `song_dis`.`catalog` WHERE `song_dis`.`" . $type . "` = " . $catalog_id . " AND `catalog_dis`.`enabled` = '1' GROUP BY `song_dis`.`" . $type . "`) > 0";
-        } elseif ($type == "album_disk") {
-            $sql = "(SELECT DISTINCT COUNT(`album_disk`.`id`) FROM `album_disk` LEFT JOIN `album` AS `album_dis` ON `album_dis`.`id` = `album_disk`.`album_id` LEFT JOIN `catalog` AS `catalog_dis` ON `catalog_dis`.`id` = `album_dis`.`catalog` WHERE `album_dis`.`id` = " . $catalog_id . " AND `catalog_dis`.`enabled` = '1' GROUP BY `album_disk`.`id`) > 0";
-        } elseif ($type == "video") {
-            $sql = "(SELECT COUNT(`video_dis`.`id`) FROM `video` AS `video_dis` LEFT JOIN `catalog` AS `catalog_dis` ON `catalog_dis`.`id` = `video_dis`.`catalog` WHERE `video_dis`.`id` = " . $catalog_id . " AND `catalog_dis`.`enabled` = '1' GROUP BY `video_dis`.`id`) > 0";
+            $select_count = <<<SQL
+                SELECT COUNT(`song_dis`.`id`)
+                FROM `song` AS `song_dis`
+                LEFT JOIN `catalog` AS `catalog_dis` ON `catalog_dis`.`id` = `song_dis`.`catalog`
+                WHERE `song_dis`.`$type` = $object_id AND `catalog_dis`.`enabled` = '1'
+                GROUP BY `song_dis`.`$type`
+SQL;
+        } else if ($type == "artist") {
+            $select_count = <<<SQL
+                SELECT COUNT(`song_dis`.`id`)
+                FROM `song` AS `song_dis`
+                INNER JOIN `artist_map` AS `artist_map_dis` ON `artist_map_dis`.`artist_id` = `artist`.`id` AND `artist_map_dis`.`object_id` = `song_dis`.`id` AND `object_type` = 'song'
+                LEFT JOIN `catalog` AS `catalog_dis` ON `catalog_dis`.`id` = `song_dis`.`catalog`
+                WHERE `catalog_dis`.`enabled` = '1'
+                GROUP BY `artist_map_dis`.`artist_id`
+SQL;
+        } else if ($type == "album_artist") {
+            $select_count = <<<SQL
+                SELECT COUNT(`song_dis`.`id`)
+                FROM `song` AS `song_dis`
+                INNER JOIN `album` AS `album_dis` ON `album_dis`.`id` = `song_dis`.`album`
+                INNER JOIN `artist_map` AS `artist_map_dis` ON `artist_map_dis`.`artist_id` = `artist`.`id` AND `artist_map_dis`.`object_id` = `album_dis`.`id` AND `object_type` = 'album'
+                LEFT JOIN `catalog` AS `catalog_dis` ON `catalog_dis`.`id` = `song_dis`.`catalog`
+                WHERE `catalog_dis`.`enabled` = '1'
+                GROUP BY `artist_map_dis`.`artist_id`
+SQL;
+        } else if ($type == "album_disk") {
+            $select_count = <<<SQL
+                SELECT DISTINCT COUNT(`album_disk`.`id`)
+                FROM `album_disk`
+                LEFT JOIN `album` AS `album_dis` ON `album_dis`.`id` = `album_disk`.`album_id`
+                LEFT JOIN `catalog` AS `catalog_dis` ON `catalog_dis`.`id` = `album_dis`.`catalog`
+                WHERE `album_dis`.`id` = $object_id AND `catalog_dis`.`enabled` = '1'
+                GROUP BY `album_disk`.`id`
+SQL;
+        } else if ($type == "video") {
+            $select_count = <<<SQL
+                SELECT COUNT(`video_dis`.`id`)
+                FROM `video` AS `video_dis`
+                LEFT JOIN `catalog` AS `catalog_dis` ON `catalog_dis`.`id` = `video_dis`.`catalog`
+                WHERE `video_dis`.`id` = $object_id AND `catalog_dis`.`enabled` = '1'
+                GROUP BY `video_dis`.`id`
+SQL;
         }
+
+        // If not a single condition above matches, turns into (1) > 0, the 'always true' expression.
+        $sql = "({$select_count}) > 0";
 
         return $sql;
     }
