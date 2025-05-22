@@ -1255,7 +1255,7 @@ class User extends database_object
         }
 
         if (!array_key_exists('url', $avatar)) {
-            $avatar['url']        = (($local) ? AmpConfig::get('local_web_path') : AmpConfig::get_web_path()) . '/images/blankuser.png';
+            $avatar['url']        = (($local) ? AmpConfig::get('local_web_path') : AmpConfig::get_web_path()) . '/images/ubuntu-yaru/user-blank-full-size.png';
             $avatar['url_mini']   = $avatar['url'];
             $avatar['url_medium'] = $avatar['url'];
         }
