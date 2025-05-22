@@ -151,7 +151,7 @@ abstract readonly class AbstractShowAction implements ApplicationActionInterface
                 $mime       = 'image/png';
                 $defaultimg = $this->configContainer->get('custom_blankalbum');
                 if (empty($defaultimg) || (strpos($defaultimg, "http://") !== 0 && strpos($defaultimg, "https://") !== 0)) {
-                    $defaultimg = $rootimg . "blankalbum.png";
+                    $defaultimg = $rootimg . Art::get_fallback_image($type);
                 }
                 $etag  = "EmptyMediaAlbum";
                 $image = file_get_contents($defaultimg);
