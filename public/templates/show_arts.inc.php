@@ -58,7 +58,8 @@ while ($count <= $rows) {
             $dimensions = Core::image_dimensions(Art::get_from_source($_SESSION['form']['images'][$key], $object_type));
         }
         if ((int) $dimensions['width'] == 0 || (int) $dimensions['height'] == 0) {
-            $image_url = $web_path . '/images/blankalbum.png';
+            $fallback_image = Art::get_fallback_image_filename($object_type);
+            $image_url = $web_path . '/images/' . $fallback_image;
         }
         if (!isset($images[$key])) {
             echo "<td>&nbsp;</td>\n";
