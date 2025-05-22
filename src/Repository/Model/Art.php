@@ -281,7 +281,7 @@ class Art extends database_object
 
         // return a default image if fallback is requested
         if (!$this->raw && $fallback) {
-            $this->raw      = $this->get_blankalbum($size);
+            $this->raw      = $this->get_resized_fallback_image($size);
             $this->raw_mime = 'image/png';
             $this->fallback = true;
         }
@@ -729,33 +729,83 @@ class Art extends database_object
         return true;
     }
 
-    private function get_blankalbum(?string $size = null): string
-    {
+    /**
+     * get_fallback_image_filename
+     * Returns a fallback image name for the object type.
+     */
+    public static function get_fallback_image_filename(?string $object_type = null, ?bool $from_subdir = null): string {
+        $fallback_image = 'object-blank-full-size.png';
+        if (!empty($object_type)) {
+            $fallback_image = match ($object_type) {
+                'song' => 'song-blank-full-size.png',
+                'album' => 'album-blank-full-size.png',
+                'playlist' => 'playlist-blank-full-size.png',
+                'artist' => 'artist-blank-full-size.png',
+                default => $fallback_image,
+            };
+        }
+
+        if (empty($from_subdir) || !$from_subdir) {
+            $fallback_image = 'ubuntu-yaru/' . $fallback_image;
+        }
+
+        return $fallback_image;
+    }
+
+    /**
+     * get_resized_fallback_image_filename
+     * Returns a resized fallback image name for the object type.
+     */
+    public static function get_resized_fallback_image_filename(?string $object_type = null, ?string $size = null, ?bool $from_subdir = null): string {
+        $fallback_image = self::get_fallback_image_filename($object_type, $from_subdir);
+
         switch ($size) {
             case '128x128':
-                $path         = __DIR__ . '/../../../public/images/blankalbum_128x128.png';
+                $path = str_replace('full-size', '128px', $fallback_image);
+                break;
+            case '256x256':
+                $path = str_replace('full-size', '256px', $fallback_image);
+                break;
+            case '384x384':
+                $path = str_replace('full-size', '384px', $fallback_image);
+                break;
+            default:
+            case '768x768':
+                $path = str_replace('full-size', '768px', $fallback_image);
+                break;
+        }
+
+        return $fallback_image;
+    }
+
+    /**
+     * get_resized_fallback_image
+     * Returns a resized fallback image for the object type.
+     */
+    private function get_resized_fallback_image(?string $size = null): string
+    {
+        $fallback_image = $this::get_resized_fallback_image_filename($this->object_type, $size);
+
+        $path = __DIR__ . '/../../../public/images/' . $fallback_image;
+
+        switch ($size) {
+            case '128x128':
                 $this->width  = 128;
                 $this->height = 128;
                 break;
             case '256x256':
-                $path         = __DIR__ . '/../../../public/images/blankalbum_256x256.png';
                 $this->width  = 256;
                 $this->height = 256;
                 break;
             case '384x384':
-                $path         = __DIR__ . '/../../../public/images/blankalbum_384x384.png';
                 $this->width  = 384;
                 $this->height = 384;
                 break;
+            default:
             case '768x768':
-                $path         = __DIR__ . '/../../../public/images/blankalbum_768x768.png';
                 $this->width  = 768;
                 $this->height = 768;
                 break;
-            default:
-                $path         = __DIR__ . '/../../../public/images/blankalbum.png';
-                $this->width  = 1400;
-                $this->height = 1400;
         }
 
         if (!Core::is_readable($path)) {
