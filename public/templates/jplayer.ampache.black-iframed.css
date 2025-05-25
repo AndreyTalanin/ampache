@@ -548,7 +548,8 @@ a.jp-volume-max:hover {
     font-size: 1.5em;
     font-family: 'Verdana', Arial, sans-serif;
     color: rgb(153, 153, 153);
-    width: 300px;
+    width: calc(25% - 110px);
+    min-width: 300px;
     z-index: 9999;
 }
 
