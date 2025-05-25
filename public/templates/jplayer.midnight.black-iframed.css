@@ -543,12 +543,13 @@ a.jp-volume-max:hover {
     font-size: 1.5em;
     font-family: 'Verdana', Arial, sans-serif;
     color: rgb(153, 153, 153);
-    width: 300px;
+    /* (left half of the screen) - ((.jp-type-playlist->width) / 2) - (self->left) - (reasonable margin) */
+    width: calc(50% - 240px - 110px - 20px);
     z-index: 9999;
 }
 
 .playing_artist {
-    font-size: 0.5em;
+    font-size: 12px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -559,7 +560,8 @@ a.jp-volume-max:hover {
 }
 
 .playing_title {
-    font-size: 0.7em;
+    font-size: 14px;
+    font-weight: bold;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -623,7 +625,8 @@ a.jp-volume-max:hover {
 .jp-playlist {
     top: 0;
     right: 0;
-    width: 25%;
+    /* (right half of the screen) - ((.jp-type-playlist->width) / 2) - (.player_actions->width+margin) - (reasonable margin) */
+    width: calc(50% - 240px - 62px - 20px);
     height: 95%;
     overflow: auto;
     text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
@@ -652,7 +655,7 @@ a.jp-volume-max:hover {
 }
 
 .jp-playlist li {
-    padding: 6px 15px;
+    padding: 5px 10px;
     text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
 }
 
@@ -666,16 +669,14 @@ a.jp-volume-max:hover {
     border-bottom: none;
 }
 
-.jp-type-playlist .jp-playlist li.jp-playlist-current {
-    padding-left: 20px;
-}
-
 .jp-type-playlist .jp-playlist a {
+    font-size: 12px;
+    font-weight: bold;
     text-decoration: none;
 }
 
 .jp-type-playlist .jp-playlist a.jp-playlist-current {
-    font-weight: bold;
+    text-decoration: underline;
 }
 
 .jp-type-playlist .jp-playlist a.jp-playlist-item-remove {
@@ -691,6 +692,10 @@ a.jp-volume-max:hover {
     color: #fff;
 }
 
+.jp-type-playlist .jp-playlist a .jp-artist {
+    font-weight: normal;
+}
+
 .jp-type-playlist .jp-playlist .jp-free-media {
     float: right;
     display: inline;
@@ -704,10 +709,6 @@ a.jp-volume-max:hover {
 
 .jp-type-playlist .jp-playlist .jp-free-media a:hover {
     color: #fff;
-}
-
-.jp-artist {
-    font-size: 0.8em;
 }
 
 /* @end */
@@ -919,9 +920,10 @@ a.jp-shuffle-off:hover {
 
 .player_actions {
     position: absolute;
-    top: 2px;
+    top: 0px;
     margin-right: 2px;
-    right: 25%;
+    /* (.jp-playlist->width) + (self->margin) */
+    right: calc(50% - 240px - 62px - 20px + 2px);
     font-size: 0.67em;
     width: 60px;
     height: 95px;
