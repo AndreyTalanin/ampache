@@ -543,8 +543,8 @@ a.jp-volume-max:hover {
     font-size: 1.5em;
     font-family: 'Verdana', Arial, sans-serif;
     color: rgb(153, 153, 153);
-    width: calc(25% - 110px);
-    min-width: 300px;
+    /* (left half of the screen) - ((.jp-type-playlist->width) / 2) - (self->left) - (reasonable margin) */
+    width: calc(50% - 240px - 110px - 20px);
     z-index: 9999;
 }
 
@@ -625,7 +625,8 @@ a.jp-volume-max:hover {
 .jp-playlist {
     top: 0;
     right: 0;
-    width: 25%;
+    /* (right half of the screen) - ((.jp-type-playlist->width) / 2) - (.player_actions->width+margin) - (reasonable margin) */
+    width: calc(50% - 240px - 62px - 20px);
     height: 95%;
     overflow: auto;
     text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
@@ -919,9 +920,10 @@ a.jp-shuffle-off:hover {
 
 .player_actions {
     position: absolute;
-    top: 2px;
+    top: 0px;
     margin-right: 2px;
-    right: 25%;
+    /* (.jp-playlist->width) + (self->margin) */
+    right: calc(50% - 240px - 62px - 20px + 2px);
     font-size: 0.67em;
     width: 60px;
     height: 95px;
