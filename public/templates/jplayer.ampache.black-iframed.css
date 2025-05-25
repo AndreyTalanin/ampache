@@ -659,7 +659,7 @@ a.jp-volume-max:hover {
 }
 
 .jp-playlist li {
-    padding: 6px 15px;
+    padding: 5px 10px;
     text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
 }
 
@@ -671,10 +671,6 @@ a.jp-volume-max:hover {
 
 .jp-type-playlist .jp-playlist li:last-child {
     border-bottom: none;
-}
-
-.jp-type-playlist .jp-playlist li.jp-playlist-current {
-    padding-left: 20px;
 }
 
 .jp-type-playlist .jp-playlist a {
@@ -713,10 +709,6 @@ a.jp-volume-max:hover {
 
 .jp-type-playlist .jp-playlist .jp-free-media a:hover {
     color: #fff;
-}
-
-.jp-artist {
-    font-size: 0.8em;
 }
 
 /* @end */
