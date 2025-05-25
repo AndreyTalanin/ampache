@@ -676,11 +676,13 @@ a.jp-volume-max:hover {
 }
 
 .jp-type-playlist .jp-playlist a {
+    font-size: 12px;
+    font-weight: bold;
     text-decoration: none;
 }
 
-.jp-type-playlist .jp-playlist a.jp-playlist-current {
-    font-weight: bold;
+.jp-type-playlist .jp-playlist a .jp-artist {
+    font-weight: normal;
 }
 
 .jp-type-playlist .jp-playlist a.jp-playlist-item-remove {
