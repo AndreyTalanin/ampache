@@ -1117,11 +1117,6 @@ table.tabledata tbody tr:focus .cel_item_add {
     display: block;
 }
 
-table.tabledata tbody .cel_time {
-    min-width: 40px;
-    width: 40px !important;
-}
-
 table.tabledata tbody .cel_action {
     width: 105px !important;
     max-width: 105px;
@@ -1445,7 +1440,8 @@ div.box.box_rules {
 .cel_counter,
 .cel_songs,
 .cel_albums,
-.cel_year {
+.cel_year,
+.cel_time {
     width: 60px;
     text-align: center;
 }
@@ -1456,7 +1452,8 @@ div.box.box_rules {
 .cel_counter,
 .cel_songs,
 .cel_albums,
-.cel_year {
+.cel_year,
+.cel_time {
     white-space: normal !important;
     text-overflow: ellipsis;
     overflow: hidden;
