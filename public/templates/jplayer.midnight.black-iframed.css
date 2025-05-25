@@ -548,7 +548,7 @@ a.jp-volume-max:hover {
 }
 
 .playing_artist {
-    font-size: 0.5em;
+    font-size: 12px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -559,7 +559,8 @@ a.jp-volume-max:hover {
 }
 
 .playing_title {
-    font-size: 0.7em;
+    font-size: 14px;
+    font-weight: bold;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
