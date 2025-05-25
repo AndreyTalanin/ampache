@@ -28,6 +28,7 @@ namespace Ampache\Gui\Song;
 use Ampache\Config\ConfigContainerInterface;
 use Ampache\Config\ConfigurationKeyEnum;
 use Ampache\Module\Authorization\AccessTypeEnum;
+use Ampache\Repository\Model\Browse;
 use Ampache\Repository\Model\Catalog;
 use Ampache\Repository\Model\ModelFactoryInterface;
 use Ampache\Repository\Model\Rating;
@@ -45,7 +46,12 @@ use Ampache\Module\Util\Ui;
 
 final readonly class SongViewAdapter implements SongViewAdapterInterface
 {
-    public function __construct(private ConfigContainerInterface $configContainer, private ModelFactoryInterface $modelFactory, private GuiGatekeeperInterface $gatekeeper, private Song $song)
+    public function __construct(
+        private ConfigContainerInterface $configContainer,
+        private ModelFactoryInterface $modelFactory,
+        private GuiGatekeeperInterface $gatekeeper,
+        private ?Browse $browse,
+        private Song $song)
     {
     }
 
@@ -90,6 +96,37 @@ final readonly class SongViewAdapter implements SongViewAdapterInterface
             '%s/waveform.php?song_id=%d',
             $this->configContainer->getWebPath(),
             $this->song->getId()
+        );
+    }
+
+    public function getDirectplaySingleModeButton(): string
+    {
+        $songId = $this->song->getId();
+
+        return Ajax::button(
+            '?page=stream&action=directplay&object_type=song&object_id=' . $songId,
+            'counter_1', // TODO: Figure out better icons?
+            T_('Play one'), // TODO: Find and add translations?
+            'play_song_' . $songId
+        );
+    }
+
+    public function getDirectplaySequentialModeButton(): string
+    {
+        $songId = $this->song->getId();
+
+        $browse_container_type = $this->browse->get_container_type();
+        $browse_container_id = $this->browse->get_container_id();
+
+        $action = '?page=stream&action=directplay';
+        $action .= '&object_type=' . $browse_container_type . '&object_id=' . $browse_container_id;
+        $action .= '&subobject_type=song&subobject_id=' . $songId;
+        
+        return Ajax::button(
+            $action,
+            'play_circle', // TODO: Figure out better icons?
+            T_('Play sequentially'), // TODO: Find and add translations?
+            'play_song_' . $songId . '_sequential_mode'
         );
     }
 

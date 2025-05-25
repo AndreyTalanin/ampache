@@ -6,13 +6,19 @@
         </span>
         <div class="cel_play_hover">
             <tal:block tal:condition="CONFIG/isDirectplayEnabled">
-                <tal:block tal:replace="structure SONG/getDirectplayButton">DIRECTPLAY</tal:block>
+                <tal:block tal:condition="SONG_DIRECTPLAY_OPTIONS/isDirectplaySequentialModeAvailable">
+                    <tal:block tal:replace="structure SONG/getDirectplaySingleModeButton">DIRECTPLAY SINGLE MODE</tal:block>
+                    <tal:block tal:replace="structure SONG/getDirectplaySequentialModeButton">DIRECTPLAY SEQUENTIAL MODE</tal:block>
+                </tal:block>
+                <tal:block tal:condition="not: SONG_DIRECTPLAY_OPTIONS/isDirectplaySequentialModeAvailable">
+                    <tal:block tal:replace="structure SONG/getDirectplayButton">DIRECTPLAY</tal:block>
+                </tal:block>
                 <tal:block tal:condition="SONG/canAutoplayNext" tal:replace="structure SONG/getAutoplayNextButton">PLAY NEXT</tal:block>
                 <tal:block tal:condition="SONG/canAppendNext" tal:replace="structure SONG/getAppendNextButton">APPEND NEXT</tal:block>
             </tal:block>
         </div>
     </td>
-    <td tal:condition="IS_TABLE_VIEW" class="cel_song" tal:content="structure SONG/getSongLink">LINK</td>
+    <td tal:condition="IS_TABLE_VIEW" class="cel_title" tal:content="structure SONG/getSongLink">LINK</td>
     <td tal:condition="not:IS_TABLE_VIEW" class="mash_song" tal:content="structure SONG/getSongLink">LINK</td>
     <td class="cel_add">
         <span class="cel_item_add">

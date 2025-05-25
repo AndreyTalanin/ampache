@@ -86,16 +86,16 @@ $replaygain = (AmpConfig::get('theme_color', 'dark') == 'light')
             cssSelectorAncestor: "#jp_container_1"
         }, [], {
             playlistOptions: {
-                autoPlay: <?php echo ($autoplay) ? 'true' : 'false'; ?>,
+                autoPlay: false, // playback is started manually after adding media
                 removePlayed: <?php echo ($removePlayed) ? 'true' : 'false'; ?>, // remove tracks before the current playlist item
                 removeCount: <?php echo $removeCount; ?>, // shift the index back to keep x items BEFORE the current index
                 loopBack: false, // repeat a finished playlist from the start
                 shuffleOnLoop: false,
                 enableRemoveControls: true,
-                displayTime: 'slow',
-                addTime: 'fast',
-                removeTime: 'fast',
-                shuffleTime: 'slow'
+                addTime: 0,
+                removeTime: 0,
+                displayTime: 0,
+                shuffleTime: 0
             },
             swfPath: "<?php echo $web_path; ?>/lib/modules/jplayer",
             preload: 'auto',
@@ -368,6 +368,27 @@ if (AmpConfig::get('song_page_title') && $isShare === false) {
         replaygainNode = null;
         replaygainEnabled = false;
         <?php echo WebPlayer::add_media_js($playlist); ?>
+        
+        function isCustomPlayInitialPosition(media) {
+            return media['custom_play_initial_position']; // checks that value is convertible to boolean
+        }
+
+        var customPlayInitialPositionIndex = jplaylist.playlist.findIndex(isCustomPlayInitialPosition);
+        if (customPlayInitialPositionIndex > -1) {
+            console.log('custom play initial position is specified:', customPlayInitialPositionIndex, '(zero-based)');
+        }
+
+        // use a 500 ms timeout to allow the player to process added media
+        setTimeout(() => {
+            var playInitialPositionIndex = customPlayInitialPositionIndex > -1 ? customPlayInitialPositionIndex : 0;
+            <?php if ($autoplay) { ?>
+            console.log('starting playback from position', playInitialPositionIndex, '(zero-based)');
+            jplaylist.play(playInitialPositionIndex);
+            <?php } else { ?>
+            console.log('setting current playlist position as', playInitialPositionIndex, '(zero-based)');
+            jplaylist.select(playInitialPositionIndex);
+            <?php } ?>
+        }, 500);
 
         $("#jquery_jplayer_1").resizable({
             alsoResize: "#jquery_jplayer_1 video",
@@ -377,6 +398,8 @@ if (AmpConfig::get('song_page_title') && $isShare === false) {
         $("#jquery_jplayer_1 video").resizable();
 
         $("#jquery_jplayer_1").draggable();
+
+        console.log('finished initializing the web player');
     });
 </script>
 <?php // Load Aurora.js scripts

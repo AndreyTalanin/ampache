@@ -62,7 +62,7 @@ $cel_play_text = ($show_track)
     ? Ajax::text('?page=browse&action=set_sort&browse_id=' . $browse->id . '&sort=track' . $argument_param, '#', 'song_sort_track' . $browse->id)
     : '';
 //mashup and grid view need different css
-$cel_song    = ($is_table) ? "cel_song" : 'grid_song';
+$cel_song    = ($is_table) ? "cel_title" : 'grid_song';
 $cel_album   = ($is_table) ? "cel_album" : 'grid_album';
 $cel_artist  = ($is_table) ? "cel_artist" : 'grid_artist';
 $cel_tags    = ($is_table) ? "cel_tags" : 'grid_tags';
@@ -149,7 +149,8 @@ foreach ($object_ids as $song_id) {
                     $content = $talFactory->createTalView()
                         ->setContext('USER_IS_REGISTERED', User::is_registered())
                         ->setContext('USING_RATINGS', User::is_registered() && (AmpConfig::get('ratings')))
-                        ->setContext('SONG', $guiFactory->createSongViewAdapter($gatekeeper, $libitem))
+                        ->setContext('SONG', $guiFactory->createSongBrowsedViewAdapter($gatekeeper, $browse, $libitem))
+                        ->setContext('SONG_DIRECTPLAY_OPTIONS', $guiFactory->createSongBrowsedDirectplayOptionsViewAdapter($browse))
                         ->setContext('CONFIG', $guiFactory->createConfigViewAdapter())
                         ->setContext('ARGUMENT_PARAM', $argument_param)
                         ->setContext('IS_TABLE_VIEW', $is_table)

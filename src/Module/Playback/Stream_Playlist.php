@@ -206,7 +206,8 @@ class Stream_Playlist
      *     player?: string,
      *     format?: string,
      *     transcode_to?: string,
-     *     custom_play_action?: string
+     *     custom_play_action?: string,
+     *     custom_play_initial_position?: bool
      * }> $media
      * @return list<Stream_Url>
      */
@@ -234,7 +235,8 @@ class Stream_Playlist
      *     player?: string,
      *     format?: string,
      *     transcode_to?: string,
-     *     custom_play_action?: string
+     *     custom_play_action?: string,
+     *     custom_play_initial_position?: bool
      * } $media
      */
     public static function media_to_url(
@@ -277,6 +279,9 @@ class Stream_Playlist
         }
         if (array_key_exists('custom_play_action', $media)) {
             $additional_params .= "&custom_play_action=" . $media['custom_play_action'];
+        }
+        if (array_key_exists('custom_play_initial_position', $media)) {
+            $additional_params .= "&custom_play_initial_position=" . $media['custom_play_initial_position'];
         }
 
         if (array_key_exists('iframe', $_SESSION) && array_key_exists('subtitle', $_SESSION['iframe'])) {
@@ -536,7 +541,8 @@ class Stream_Playlist
      *     player?: string,
      *     format?: string,
      *     transcode_to?: string,
-     *     custom_play_action?: string
+     *     custom_play_action?: string,
+     *     custom_play_initial_position?: bool
      * }> $media
      * @param string $additional_params
      */
