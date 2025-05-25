@@ -679,8 +679,8 @@ a.jp-volume-max:hover {
     text-decoration: none;
 }
 
-.jp-type-playlist .jp-playlist a .jp-artist {
-    font-weight: normal;
+.jp-type-playlist .jp-playlist a.jp-playlist-current {
+    text-decoration: underline;
 }
 
 .jp-type-playlist .jp-playlist a.jp-playlist-item-remove {
@@ -694,6 +694,10 @@ a.jp-volume-max:hover {
 
 .jp-type-playlist .jp-playlist a.jp-playlist-item-remove:hover {
     color: #fff;
+}
+
+.jp-type-playlist .jp-playlist a .jp-artist {
+    font-weight: normal;
 }
 
 .jp-type-playlist .jp-playlist .jp-free-media {
