@@ -579,10 +579,6 @@ a.jp-volume-max:hover {
     border-bottom: none;
 }
 
-.jp-type-playlist .jp-playlist li.jp-playlist-current {
-    padding-left: 20px;
-}
-
 .jp-type-playlist .jp-playlist a {
     color: #bbb;
     text-decoration: none;
