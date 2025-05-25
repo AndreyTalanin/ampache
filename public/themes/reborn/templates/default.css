@@ -1135,9 +1135,22 @@ table.tabledata tbody td.cel_counter {
     text-align: center;
 }
 
+table.tabledata tbody .cel_song,
+table.tabledata tbody .cel_album,
+table.tabledata tbody .cel_artist {
+    width: 15% !important;
+    min-width: 150px;
+    text-align: left;
+}
+
 table.tabledata td.cel_ratings {
     width: 140px !important;
     min-width: 140px;
+}
+
+table.tabledata tbody .cel_cover {
+    width: 150px !important;
+    max-width: 150px;
 }
 
 table.tabledata tbody .cel_cover {
@@ -1145,10 +1158,9 @@ table.tabledata tbody .cel_cover {
     padding-top: 10px;
 }
 
-table.tabledata tbody .cel_cover,
 table.tabledata tbody .cel_tags,
 table.tabledata tbody .cel_license {
-    width: 150px !important;
+    width: 12.5% !important;
     max-width: 150px;
 }
 
