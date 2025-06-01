@@ -1066,9 +1066,9 @@ table.tabledata .th-bottom:focus {
 }
 
 table.tabledata tbody .cel_play {
-    max-width: 85px;
-    min-width: 85px;
     width: 40px !important;
+    min-width: 85px;
+    max-width: 85px;
     text-align: right;
 }
 
@@ -1095,16 +1095,16 @@ table.tabledata tbody tr.unread {
 }
 
 table.tabledata tbody .cel_add {
-    max-width: 60px;
-    min-width: 60px;
     width: 60px !important;
+    min-width: 60px;
+    max-width: 60px;
     text-align: right;
 }
 
 table.tabledata tbody .cel_add_list {
-    max-width: 80px;
-    min-width: 80px;
     width: 80px !important;
+    min-width: 80px;
+    max-width: 80px;
     text-align: right;
 }
 
@@ -1115,11 +1115,6 @@ table.tabledata tbody .cel_item_add {
 table.tabledata tbody tr:hover .cel_item_add,
 table.tabledata tbody tr:focus .cel_item_add {
     display: block;
-}
-
-table.tabledata tbody .cel_time {
-    min-width: 40px;
-    width: 40px !important;
 }
 
 table.tabledata tbody .cel_action {
@@ -1135,9 +1130,22 @@ table.tabledata tbody td.cel_counter {
     text-align: center;
 }
 
+table.tabledata tbody .cel_song,
+table.tabledata tbody .cel_album,
+table.tabledata tbody .cel_artist {
+    width: 15% !important;
+    min-width: 150px;
+    text-align: left;
+}
+
 table.tabledata td.cel_ratings {
     width: 140px !important;
     min-width: 140px;
+}
+
+table.tabledata tbody .cel_cover {
+    width: 150px !important;
+    max-width: 150px;
 }
 
 table.tabledata tbody .cel_cover {
@@ -1145,10 +1153,9 @@ table.tabledata tbody .cel_cover {
     padding-top: 10px;
 }
 
-table.tabledata tbody .cel_cover,
 table.tabledata tbody .cel_tags,
 table.tabledata tbody .cel_license {
-    width: 150px !important;
+    width: 12.5% !important;
     max-width: 150px;
 }
 
@@ -1166,8 +1173,8 @@ table.tabledata tbody .cel_cover img {
 }
 
 table.tabledata .cel_drag {
-    max-width: 16px;
     width: 16px !important;
+    max-width: 16px;
 }
 
 table.tabledata .cel_drag img:hover {
@@ -1175,8 +1182,8 @@ table.tabledata .cel_drag img:hover {
 }
 
 table.tabledata .cel_agent {
-    text-align: center;
     width: 45px;
+    text-align: center;
 }
 
 table.tabledata .cel_agent img:hover {
@@ -1272,11 +1279,11 @@ table.gridview thead {
 
 table.gridview tr {
     float: left;
-    max-width: 15%;
+    width: 15%;
     min-width: 170px;
+    max-width: 15%;
     padding: 0.5%;
     text-align: center;
-    width: 15%;
 }
 
 table.gridview tr {
@@ -1433,7 +1440,8 @@ div.box.box_rules {
 .cel_counter,
 .cel_songs,
 .cel_albums,
-.cel_year {
+.cel_year,
+.cel_time {
     width: 60px;
     text-align: center;
 }
@@ -1444,7 +1452,8 @@ div.box.box_rules {
 .cel_counter,
 .cel_songs,
 .cel_albums,
-.cel_year {
+.cel_year,
+.cel_time {
     white-space: normal !important;
     text-overflow: ellipsis;
     overflow: hidden;
