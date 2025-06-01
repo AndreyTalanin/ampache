@@ -591,6 +591,29 @@ class Art extends database_object
     }
 
     /**
+     * get_fallback_image
+     * Returns a fallback image name for the object type.
+     */
+    public static function get_fallback_image(?string $object_type = null, ?bool $from_subdir = null): string {
+        $fallback_image = 'object-blank.png';
+        if (!empty($object_type)) {
+            $fallback_image = match ($object_type) {
+                'song' => 'song-blank.png',
+                'album' => 'album-blank.png',
+                'playlist' => 'playlist-blank.png',
+                'artist' => 'artist-blank.png',
+                default => $fallback_image,
+            };
+        }
+
+        if (empty($from_subdir) || !$from_subdir) {
+            $fallback_image = 'ubuntu-yaru/' . $fallback_image;
+        }
+
+        return $fallback_image;
+    }
+
+    /**
      * write_to_dir
      */
     private static function write_to_dir(
@@ -631,7 +654,10 @@ class Art extends database_object
      */
     private function read_from_images(): ?string
     {
-        $path = __DIR__ . '/../../../public/images/blankalbum.png';
+        $fallback_image = $this::get_fallback_image($this->type);
+
+        $path = __DIR__ . '/../../../public/images/' . $fallback_image;
+
         if (!Core::is_readable($path)) {
             debug_event(self::class, 'read_from_images ' . $path . ' cannot be read.', 1);
 

@@ -51,7 +51,7 @@ final class GetArt5Method
      *
      * id       = (string) $object_id
      * type     = (string) 'song', 'artist', 'album', 'playlist', 'search', 'podcast')
-     * fallback = (integer) 0,1, if true return default art ('blankalbum.png') //optional
+     * fallback = (integer) 0,1, if true return default art ('song-blank.png', 'album-blank.png', 'playlist-blank.png', 'artist-blank.png', 'object-blank.png') //optional
      *
      * @param array{
      *     id: string,
