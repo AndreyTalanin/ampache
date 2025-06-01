@@ -51,9 +51,9 @@ final class GetArtMethod
      * Get an art image.
      *
      * id       = (string) $object_id
-     * type     = (string) 'song', 'artist', 'album', 'playlist', 'search', 'podcast')
+     * type     = (string) 'song', 'artist', 'album', 'label', 'live_stream', 'playlist', 'podcast', 'search', 'user', 'video'
      * fallback = (integer) 0,1, if true return default art ('blankalbum.png') //optional
-     * size     = (string) width x height ('640x480') //optional
+     * size     = (string) width x height ('640x480', 'original') //optional
      *
      * @param array{
      *     id: string,
@@ -73,13 +73,32 @@ final class GetArtMethod
 
             return false;
         }
+
+        $type = (string) $input['type'];
+        if ($type == 'video' && !AmpConfig::get('allow_video')) {
+            Api::error('Enable: video', ErrorCodeEnum::ACCESS_DENIED, self::ACTION, 'system', $input['api_format']);
+
+            return false;
+        }
+
+        if ($type == 'label' && !AmpConfig::get('label')) {
+            Api::error('Enable: label', ErrorCodeEnum::ACCESS_DENIED, self::ACTION, 'system', $input['api_format']);
+
+            return false;
+        }
+
+        if ($type == 'podcast' && !AmpConfig::get('podcast')) {
+            Api::error('Enable: podcast', ErrorCodeEnum::ACCESS_DENIED, self::ACTION, 'system', $input['api_format']);
+
+            return false;
+        }
+
         $object_id = (int) $input['id'];
-        $type      = (string) $input['type'];
-        $size      = $input['size'] ?? false;
+        $size      = (string)($input['size'] ?? 'original');
         $fallback  = (array_key_exists('fallback', $input) && (int)$input['fallback'] == 1);
 
         // confirm the correct data
-        if (!in_array(strtolower($type), ['song', 'album', 'artist', 'playlist', 'search', 'podcast'])) {
+        if (!in_array(strtolower($type), ['song', 'artist', 'album', 'label', 'live_stream', 'playlist', 'podcast', 'search', 'user', 'video'])) {
             Api::error(sprintf('Bad Request: %s', $type), ErrorCodeEnum::BAD_REQUEST, self::ACTION, 'type', $input['api_format']);
 
             return false;
@@ -110,38 +129,15 @@ final class GetArtMethod
             $art       = new Art($song->album, 'album');
         }
 
-        if ($art->has_db_info($fallback)) {
-            header('Access-Control-Allow-Origin: *');
-            if (
-                $size &&
-                preg_match('/^[0-9]+x[0-9]+$/', $size) &&
-                AmpConfig::get('resize_images')
-            ) {
-                $dimensions    = explode('x', $size);
-                $dim           = [];
-                $dim['width']  = (int) $dimensions[0];
-                $dim['height'] = (int) $dimensions[1];
+        Session::extend($input['auth'], AccessTypeEnum::API->value);
 
-                $thumb = $art->get_thumb($dim);
-                if (!empty($thumb)) {
-                    header('Content-type: ' . $thumb['thumb_mime']);
-                    header('Content-Length: ' . strlen((string) $thumb['thumb']));
-                    echo $thumb['thumb'];
-
-                    return true;
-                }
-            }
-
-            header('Content-type: ' . $art->raw_mime);
-            header('Content-Length: ' . strlen((string) $art->raw));
-            echo $art->raw;
-            Session::extend($input['auth'], AccessTypeEnum::API->value);
-
-            return true;
+        if (
+            preg_match('/^[0-9]+x[0-9]+$/', $size) &&
+            !$art->has_db_info($size, $fallback)
+        ) {
+            $size = 'original';
         }
-        // art not found
-        http_response_code(404);
 
-        return false;
+        return $art->show($size, $fallback);
     }
 }

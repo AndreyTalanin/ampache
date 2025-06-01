@@ -66,8 +66,10 @@ $web_path = AmpConfig::get_web_path();
 if ($is_mashup) {
     $name = scrub_out((string)$libitem->get_fullname()); ?>
     <td class="<?php echo $cel_cover; ?>">
-        <?php $thumb = ($browse->is_grid_view()) ? 11 : 1;
-    Art::display('podcast_episode', $libitem->id, $name, $thumb, $web_path . '/podcast_episode.php?action=show&podcast_episode=' . $libitem->id); ?>
+        <?php $size = ($browse->is_grid_view())
+            ? ['width' => 150, 'height' => 150]
+            : ['width' => 100, 'height' => 100];
+    Art::display('podcast_episode', $libitem->id, $name, $size, $web_path . '/podcast_episode.php?action=show&podcast_episode=' . $libitem->id); ?>
     </td>
 <?php
 } ?>
@@ -77,7 +79,7 @@ if ($is_mashup) {
 <?php
     echo Ajax::button('?action=basket&type=podcast_episode&id=' . $libitem->id, 'new_window', T_('Add to Temporary Playlist'), 'add_' . $libitem->id);
 if (Access::check(AccessTypeEnum::INTERFACE, AccessLevelEnum::USER)) { ?>
-        <a id="<?php echo 'add_playlist_' . $libitem->id; ?>" onclick="showPlaylistDialog(event, 'podcast_episode', '<?php echo $libitem->id; ?>')">
+        <a id="<?php echo 'add_to_playlist_' . $libitem->id; ?>" onclick="showPlaylistDialog(event, 'podcast_episode', '<?php echo $libitem->id; ?>')">
             <?php echo Ui::get_material_symbol('playlist_add', T_('Add to playlist')); ?>
         </a>
     <?php } ?>

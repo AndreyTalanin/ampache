@@ -58,7 +58,9 @@ use Ampache\Module\Util\Ui;
 
 // Don't show disabled medias to normal users
 if (!isset($libitem->enabled) || $libitem->enabled || Access::check(AccessTypeEnum::INTERFACE, AccessLevelEnum::CONTENT_MANAGER)) {
-    $thumb = (isset($browse) && $browse->is_grid_view()) ? 11 : 3;
+    $thumb = (isset($browse) && $browse->is_grid_view())
+        ? ['width' => 150, 'height' => 150]
+        : ['width' => 80, 'height' => 80];
     $link  = ($extended_links && !empty($libitem->get_f_parent_link()))
         ? $libitem->get_f_link() . '&nbsp;-&nbsp;' . $libitem->get_f_parent_link()
         : $libitem->get_f_link(); ?>
@@ -90,7 +92,7 @@ if (!isset($libitem->enabled) || $libitem->enabled || Access::check(AccessTypeEn
     <span class="cel_item_add">
         <?php echo Ajax::button('?action=basket&type=' . $object_type . '&id=' . $libitem->getId(), 'new_window', $t_add_to_temp, 'playlist_add_' . $libitem->getId());
     if (Access::check(AccessTypeEnum::INTERFACE, AccessLevelEnum::USER)) { ?>
-            <a id="<?php echo 'add_playlist_' . $libitem->getId(); ?>" onclick="showPlaylistDialog(event, '<?php echo $object_type; ?>', '<?php echo $libitem->getId(); ?>')">
+            <a id="<?php echo 'add_to_playlist_' . $libitem->getId(); ?>" onclick="showPlaylistDialog(event, '<?php echo $object_type; ?>', '<?php echo $libitem->getId(); ?>')">
                 <?php echo Ui::get_material_symbol('playlist_add', $t_add_to_list); ?>
             </a>
         <?php } ?>

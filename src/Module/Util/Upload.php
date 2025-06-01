@@ -301,7 +301,7 @@ class Upload
         if (Core::is_readable($targetfile)) {
             debug_event(self::class, 'File `' . $targetfile . '` already exists.', 3);
             $ext        = pathinfo($targetfile, PATHINFO_EXTENSION);
-            $targetfile = str_replace(('.' . $ext), '_' . ((string) time() . '.' . $ext), $targetfile);
+            $targetfile = str_replace(('.' . $ext), '_' . (time() . '.' . $ext), $targetfile);
             if (Core::is_readable($targetfile)) {
                 debug_event(self::class, 'File `' . $targetfile . '` already exists.', 1);
 
@@ -338,7 +338,7 @@ class Upload
     /**
      * get_root
      */
-    public static function get_root(Catalog $catalog = null, ?string $username = null): string
+    public static function get_root(?Catalog $catalog = null, ?string $username = null): string
     {
         if ($catalog == null) {
             $catalog_id = AmpConfig::get('upload_catalog');

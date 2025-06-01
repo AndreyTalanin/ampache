@@ -62,7 +62,7 @@ $web_path = AmpConfig::get_web_path();
 /** @var Album $album */
 $simple   = $album->get_fullname(true);
 $f_name   = $album->get_fullname(false, true);
-$title    = ($album->album_artist !== null)
+$title    = ($album->findAlbumArtist() !== null)
     ? scrub_out($f_name) . '&nbsp;-&nbsp;' . $album->get_f_parent_link()
     : scrub_out($f_name);
 
@@ -109,10 +109,8 @@ if (AmpConfig::get('external_links_musicbrainz')) {
     }
 } ?>
     </div>
-    <?php
-        $name = '[' . scrub_out($album->get_artist_fullname()) . '] ' . scrub_out($f_name);
-$thumb        = Ui::is_grid_view('album') ? 11 : 32;
-Art::display('album', $album->id, $name, $thumb); ?>
+<?php $name = '[' . scrub_out($album->get_artist_fullname()) . '] ' . scrub_out($f_name);
+Art::display('album', $album->id, $name, ['width' => 384, 'height' => 384], null, true, false); ?>
 </div>
 <?php if (User::is_registered()) {
     if (AmpConfig::get('ratings')) { ?>
@@ -177,7 +175,7 @@ if (AmpConfig::get('sociable') && $owner_id > 0) {
             <?php echo Ajax::button_with_text('?action=basket&type=album_random&id=' . $album->id, 'shuffle', $randtotemp, 'play_random_' . $album->id); ?>
         </li>
         <li>
-            <a id="<?php echo 'add_playlist_' . $album->id; ?>" onclick="showPlaylistDialog(event, 'album', '<?php echo $album->id; ?>')">
+            <a id="<?php echo 'add_to_playlist_' . $album->id; ?>" onclick="showPlaylistDialog(event, 'album', '<?php echo $album->id; ?>')">
                 <?php echo Ui::get_material_symbol('playlist_add', $addtoexist); ?>
                 <?php echo $addtoexist; ?>
             </a>
