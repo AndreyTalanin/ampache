@@ -114,9 +114,8 @@ if (AmpConfig::get('external_links_musicbrainz')) {
     </div>
     <?php
     if ($album->name != T_('Unknown (Orphaned)')) {
-        $name  = '[' . $f_album_name . '] ' . scrub_out($f_name);
-        $thumb = Ui::is_grid_view('album') ? 11 : 32;
-        Art::display('album', $album->id, $name, $thumb);
+        $name = '[' . $f_album_name . '] ' . scrub_out($f_name);
+        Art::display('album', $album->id, $name, ['width' => 384, 'height' => 384], null, true, false);
     } ?>
 </div>
 <?php if (User::is_registered()) {
@@ -179,7 +178,7 @@ if ($show_playlist_add) {
             <?php echo Ajax::button_with_text('?action=basket&type=album_random&id=' . $album->id, 'shuffle', $randtotemp, 'play_random_' . $album->id); ?>
         </li>
         <li>
-            <a id="<?php echo 'add_playlist_' . $album->id; ?>" onclick="showPlaylistDialog(event, 'album', '<?php echo $album->id; ?>')">
+            <a id="<?php echo 'add_to_playlist_' . $album->id; ?>" onclick="showPlaylistDialog(event, 'album', '<?php echo $album->id; ?>')">
                 <?php echo Ui::get_material_symbol('playlist_add', $addtoexist);
     echo $addtoexist; ?>
             </a>

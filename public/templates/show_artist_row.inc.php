@@ -67,8 +67,10 @@ $web_path   = AmpConfig::get_web_path(); ?>
 </td>
 <?php $name = scrub_out((string)$libitem->get_fullname()); ?>
 <td class="<?php echo $cel_cover; ?>">
-    <?php $thumb = (isset($browse) && $browse->is_grid_view()) ? 11 : 1;
-Art::display('artist', $libitem->id, $name, $thumb, $web_path . '/artists.php?action=show&artist=' . $libitem->id); ?>
+    <?php $size = (isset($browse) && $browse->is_grid_view())
+        ? ['width' => 150, 'height' => 150]
+        : ['width' => 100, 'height' => 100];
+Art::display('artist', $libitem->id, $name, $size, $web_path . '/artists.php?action=show&artist=' . $libitem->id); ?>
 </td>
 <td class="<?php echo $cel_artist; ?>"><?php echo $libitem->get_f_link(); ?></td>
 <td class="cel_add">
@@ -76,7 +78,7 @@ Art::display('artist', $libitem->id, $name, $thumb, $web_path . '/artists.php?ac
     <?php if ($show_playlist_add) {
         echo Ajax::button('?action=basket&type=artist&id=' . $libitem->id, 'new_window', T_('Add to Temporary Playlist'), 'add_artist_' . $libitem->id);
         echo Ajax::button('?action=basket&type=artist_random&id=' . $libitem->id, 'shuffle', T_('Random to Temporary Playlist'), 'random_artist_' . $libitem->id); ?>
-            <a id="<?php echo 'add_playlist_' . $libitem->id; ?>" onclick="showPlaylistDialog(event, 'artist', '<?php echo $libitem->id; ?>')">
+            <a id="<?php echo 'add_to_playlist_' . $libitem->id; ?>" onclick="showPlaylistDialog(event, 'artist', '<?php echo $libitem->id; ?>')">
                 <?php echo Ui::get_material_symbol('playlist_add', T_('Add to playlist')); ?>
             </a>
         <?php

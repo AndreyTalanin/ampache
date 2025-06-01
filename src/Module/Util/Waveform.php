@@ -83,7 +83,10 @@ class Waveform
 
                 $waveform = self::get_from_file($media->id, $object_type, $theme_name, $theme_color);
             } else {
-                $media->format();
+                // todo waveforms aren't saved for podcast episodes.
+                if ($media instanceof Song) {
+                    $media->fill_ext_info('waveform');
+                }
                 $waveform = $media->waveform;
             }
             if (empty($waveform)) {

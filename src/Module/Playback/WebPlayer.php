@@ -338,16 +338,6 @@ class WebPlayer
                 if (!empty($url_data['custom_play_initial_position']) && make_bool($url_data['custom_play_initial_position'])) {
                     $json['custom_play_initial_position'] = true;
                 }
-
-                // this should probably only be in songs todo i think this should be removed...
-                //if ($media->type != $types['real']) {
-                //    $pos = strrpos($url, '&');
-                //    if ($pos !== false) {
-                //        $url = substr($url, 0, $pos) . '&transcode_to=' . $types['real'] . '&' . substr($url, $pos + 1);
-                //    } else {
-                //        $url .= '&transcode_to=' . $types['real'];
-                //    }
-                //}
             }
             $json['media_id']   = $media->id;
             $json['media_type'] = $url_data['type'];

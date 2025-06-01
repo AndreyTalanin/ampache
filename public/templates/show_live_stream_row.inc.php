@@ -56,15 +56,17 @@ $object_type = 'live_stream'; ?>
     </div>
 </td>
 <td class="<?php echo $cel_cover; ?>">
-    <?php $thumb = ($browse->is_grid_view()) ? 11 : 1;
-$libitem->display_art($thumb); ?>
+    <?php $size = ($browse->is_grid_view())
+        ? ['width' => 150, 'height' => 150]
+        : ['width' => 100, 'height' => 100];
+$libitem->display_art($size); ?>
 </td>
 <td class="cel_streamname"><?php echo $libitem->get_f_link(); ?></td>
 <td class="cel_add">
     <span class="cel_item_add">
         <?php echo Ajax::button('?action=basket&type=live_stream&id=' . $libitem->id, 'new_window', T_('Add to Temporary Playlist'), 'playlist_add_' . $libitem->id);
 if (Access::check(AccessTypeEnum::INTERFACE, AccessLevelEnum::USER)) { ?>
-            <a id="<?php echo 'add_playlist_' . $libitem->id; ?>" onclick="showPlaylistDialog(event, '<?php echo 'live_stream'; ?>', '<?php echo $libitem->id; ?>')">
+            <a id="<?php echo 'add_to_playlist_' . $libitem->id; ?>" onclick="showPlaylistDialog(event, '<?php echo 'live_stream'; ?>', '<?php echo $libitem->id; ?>')">
                 <?php echo Ui::get_material_symbol('playlist_add', T_('Add to playlist')); ?>
             </a>
         <?php } ?>

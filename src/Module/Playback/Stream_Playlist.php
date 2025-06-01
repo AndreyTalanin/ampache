@@ -257,7 +257,6 @@ class Stream_Playlist
         if ($object->isNew()) {
             return null;
         }
-        $object->format();
 
         if (array_key_exists('client', $media)) {
             $additional_params .= "&client=" . $media['client'];
@@ -350,7 +349,7 @@ class Stream_Playlist
                     $art_object       = ($show_song_art && $has_art) ? $object->id : $object->album;
                     $art_type         = ($show_song_art && $has_art) ? 'song' : 'album';
                     $url['image_url'] = Art::url($art_object, $art_type, $api_session, (AmpConfig::get('ajax_load') ? 3 : 4));
-                    //$url['album']     = $object->f_album_full;
+                    //$url['album']     = $object->get_album_fullname();
                     $url['codec']     = $object->type;
                     $url['track_num'] = (string)$object->track;
                     break;
