@@ -154,7 +154,9 @@ abstract readonly class AbstractShowAction implements ApplicationActionInterface
                 if (empty($defaultimg) || (strpos($defaultimg, "http://") !== 0 && strpos($defaultimg, "https://") !== 0)) {
                     $defaultimg = $rootimg . Art::get_fallback_image($type);
                 }
-                $etag  = "EmptyMediaAlbum";
+                $etag  = ($has_size && in_array($size, ['128x128', '256x256', '384x384', '768x768']))
+                    ? "EmptyMediaAlbum" . $size
+                    : "EmptyMediaAlbum";
                 $image = file_get_contents($defaultimg);
             } else {
                 // show the original image or thumbnail
@@ -172,9 +174,7 @@ abstract readonly class AbstractShowAction implements ApplicationActionInterface
                     // thumbs should be avoided but can still be used
                     $size       = Art::get_thumb_size($thumb);
                     $thumb_data = $art->get_thumb($size);
-                    if ($art->id > 0) {
-                        $etag .= '-' . $thumb;
-                    }
+                    $etag       = null;
                 }
 
                 $mime  = (array_key_exists('thumb_mime', $thumb_data))
