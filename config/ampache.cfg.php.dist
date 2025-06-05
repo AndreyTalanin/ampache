@@ -286,6 +286,13 @@ metadata_order = "getID3,filename"
 ; DEFAULT: "filename,getID3"
 metadata_order_video = "filename,getID3"
 
+; This determines the policy that is used when querying MusicBrainz.
+; It is possible to prefer data from MusicBrainz, to prefer local tags with
+; fallback to MusicBrainz or to never query MusicBrainz (e.g. because of network limitations).
+; POSSIBLE VALUES: always, when_necessary, never
+; DEFAULT: "always"
+;metadata_musicbrainz_query_policy = "never"
+
 ; This determines if extended metadata grabbed from external services should be deferred.
 ; If enabled, extended metadata is retrieved when browsing the library item.
 ; If disabled, extended metadata is retrieved at catalog update.
