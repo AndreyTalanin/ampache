@@ -75,6 +75,7 @@ final class VaInfo implements VaInfoInterface
         'mb_albumid' => null,
         'mb_artistid' => null,
         'mb_artistid_array' => null,
+        'mb_ex_ignore_album_tags' => null, // Non-official extension tag.
         'mb_trackid' => null,
         'mime' => null,
         'mode' => null,
@@ -618,6 +619,10 @@ final class VaInfo implements VaInfoInterface
                 ? $tags['mb_albumartistid_array']
                 : $info['mb_albumartistid_array'];
 
+            $info['mb_ex_ignore_album_tags']    = (!$info['mb_ex_ignore_album_tags'] && array_key_exists('mb_ex_ignore_album_tags', $tags))
+                ? trim((string)$tags['mb_ex_ignore_album_tags'])
+                : $info['mb_ex_ignore_album_tags'];
+
             $info['release_type']   = (!$info['release_type'] && array_key_exists('release_type', $tags)) ? trim((string)$tags['release_type']) : $info['release_type'];
             $info['release_status'] = (!$info['release_status'] && array_key_exists('release_status', $tags)) ? trim((string)$tags['release_status']) : $info['release_status'];
 
@@ -1064,6 +1069,9 @@ final class VaInfo implements VaInfoInterface
                         ? implode(", ", $data)
                         : implode(', ', array_diff(preg_split("/[^a-zA-Z0-9*]/", $data[0]) ?: [], ['']));
                     break;
+                case 'musicbrainz_ex_ignorealbumtags':
+                    $parsed['mb_ex_ignore_album_tags'] = $data[0];
+                    break;
                 case 'originalyear':
                 case 'originalreleaseyear':
                     $parsed['original_year'] = $data[0];
@@ -1184,6 +1192,9 @@ final class VaInfo implements VaInfoInterface
                     $parsed['release_status'] = (is_array($data) && count($data) > 1)
                         ? implode(", ", $data)
                         : implode(', ', array_diff(preg_split("/[^a-zA-Z0-9*]/", $data[0]) ?: [], ['']));
+                    break;
+                case 'musicbrainz_ex_ignorealbumtags':
+                    $parsed['mb_ex_ignore_album_tags'] = $data[0];
                     break;
                 case 'unsyncedlyrics':
                 case 'unsynced lyrics':
@@ -1419,6 +1430,9 @@ final class VaInfo implements VaInfoInterface
                     case 'musicbrainz album status':
                         $parsed['release_status'] = $id3v2['comments']['text'][$txxx['description']];
                         break;
+                    case 'musicbrainz_ex_ignorealbumtags':
+                        $parsed['mb_ex_ignore_album_tags'] = $id3v2['comments']['text'][$txxx['description']];
+                        break;
                     case 'replaygain_track_gain':
                         // FIXME: shouldn't here $txxx['data'] be replaced by $id3v2['comments']['text'][$txxx['description']]
                         // all replaygain values aren't always correctly retrieved
@@ -1573,6 +1587,9 @@ final class VaInfo implements VaInfoInterface
                         ? implode(", ", $data)
                         : implode(', ', array_diff(preg_split("/[^a-zA-Z0-9*]/", $data[0]) ?: [], ['']));
                     break;
+                case 'musicbrainz_ex_ignorealbumtags':
+                    $parsed['mb_ex_ignore_album_tags'] = $data[0];
+                    break;
                 case 'track_number':
                     //$parsed['track'] = $data[0];
                     $elements              = explode('/', $data[0]);
@@ -1682,6 +1699,9 @@ final class VaInfo implements VaInfoInterface
                     $parsed['release_status'] = (is_array($data) && count($data) > 1)
                         ? implode(", ", $data)
                         : implode(', ', array_diff(preg_split("/[^a-zA-Z0-9*]/", $data[0]) ?: [], ['']));
+                    break;
+                case 'musicbrainz_ex_ignorealbumtags':
+                    $parsed['mb_ex_ignore_album_tags'] = $data[0];
                     break;
                 case 'releasecomment':
                 case 'version':
