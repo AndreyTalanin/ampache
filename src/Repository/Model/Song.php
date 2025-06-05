@@ -250,8 +250,6 @@ class Song extends database_object implements
         $size             = $results['size'] ?? 0;
         $time             = $results['time'] ?? 0;
         $track            = Catalog::check_track((string) $results['track']);
-        $artist_mbid      = $results['mb_artistid'] ?? null;
-        $albumartist_mbid = $results['mb_albumartistid'] ?? null;
         $disk             = (Album::sanitize_disk($results['disk']) > 0) ? Album::sanitize_disk($results['disk']) : 1;
         $disksubtitle     = $results['disksubtitle'] ?? null;
         $year             = Catalog::normalize_year($results['year'] ?? 0);
@@ -269,6 +267,7 @@ class Song extends database_object implements
         }
 
         $mb_ignore_album_tags = !empty($results['mb_ex_ignore_album_tags']) && make_bool($results['mb_ex_ignore_album_tags']);
+        $mb_ignore_artist_tags = !empty($results['mb_ex_ignore_artist_tags']) && make_bool($results['mb_ex_ignore_artist_tags']);
 
         $track_mbid       = !$mb_ignore_album_tags
             ? ($results['mb_trackid'] ?? $results['mbid'] ?? null)
@@ -276,6 +275,9 @@ class Song extends database_object implements
 
         $album_mbid       = !$mb_ignore_album_tags ? ($results['mb_albumid'] ?? null) : null;
         $album_mbid_group = !$mb_ignore_album_tags ? ($results['mb_albumid_group'] ?? null) : null;
+        
+        $artist_mbid      = !$mb_ignore_artist_tags ? ($results['mb_artistid'] ?? null) : null;
+        $albumartist_mbid = !$mb_ignore_artist_tags ? ($results['mb_albumartistid'] ?? null) : null;
 
         // info for the artist_map table.
         $artists_array          = $results['artists'] ?? [];

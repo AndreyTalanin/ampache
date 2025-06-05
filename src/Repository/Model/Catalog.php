@@ -2685,6 +2685,7 @@ abstract class Catalog extends database_object
         }
 
         $mb_ignore_album_tags = !empty($results['mb_ex_ignore_album_tags']) && make_bool($results['mb_ex_ignore_album_tags']);
+        $mb_ignore_artist_tags = !empty($results['mb_ex_ignore_artist_tags']) && make_bool($results['mb_ex_ignore_artist_tags']);
 
         // musicbrainz tracks belong to an album, so they should be ignored as well
         $new_song->mbid = (!empty($results['mb_trackid']) && !$mb_ignore_album_tags)
@@ -2784,8 +2785,8 @@ abstract class Catalog extends database_object
 
         // info for the artist table.
         $artist           = self::check_length($results['artist']);
-        $artist_mbid      = $results['mb_artistid'];
-        $albumartist_mbid = $results['mb_albumartistid'];
+        $artist_mbid      = !$mb_ignore_artist_tags ? $results['mb_artistid'] : null;
+        $albumartist_mbid = !$mb_ignore_artist_tags ? $results['mb_albumartistid'] : null;
         // info for the album table.
         $album            = self::check_length($results['album']);
         // year is also included in album
@@ -2805,8 +2806,8 @@ abstract class Catalog extends database_object
 
         // info for the artist_map table.
         $artists_array          = $results['artists'] ?? [];
-        $artist_mbid_array      = $results['mb_artistid_array'] ?? [];
-        $albumartist_mbid_array = $results['mb_albumartistid_array'] ?? [];
+        $artist_mbid_array      = !$mb_ignore_artist_tags ? ($results['mb_artistid_array'] ?? []) : [];
+        $albumartist_mbid_array = !$mb_ignore_artist_tags ? ($results['mb_albumartistid_array'] ?? []) : [];
         // if you have an artist array this will be named better than what your tags will give you
         if (!empty($artists_array)) {
             if (
