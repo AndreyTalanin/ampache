@@ -389,8 +389,8 @@ class Song extends database_object implements
 
         if ($use_artist_musicbrainz_tags) {
             // add song artists with a valid mbid to the list
-            foreach ($artist_mbid_array as $songArtist_mbid) {
-                $song_artist_id = Artist::check_mbid($songArtist_mbid);
+            foreach ($artist_mbid_array as $artist_mbid_array_item) {
+                $song_artist_id = Artist::check_mbid($artist_mbid_array_item);
                 if ($song_artist_id > 0) {
                     $artists[] = $song_artist_id;
                     if ($song_artist_id != $artist_id) {
@@ -403,8 +403,11 @@ class Song extends database_object implements
 
         if (!$use_artist_musicbrainz_tags || count($artists_array) > count($artist_mbid_array)) {
             // add song artists found by name to the list (ignore artist names when we use MBID's)
-            foreach ($artists_array as $artist_name) {
-                $song_artist_id = (int)Artist::check($artist_name);
+            foreach ($artists_array as $artist_index => $artist_name) {
+                $song_artist_mbid = count($artists_array) == count($artist_mbid_array)
+                    ? $artist_mbid_array[$artist_index]
+                    : null;
+                $song_artist_id = (int)Artist::check($artist_name, $song_artist_mbid);
                 if ($song_artist_id > 0) {
                     $artists[] = $song_artist_id;
                     if ($song_artist_id != $artist_id) {
@@ -421,11 +424,11 @@ class Song extends database_object implements
 
         if ($use_albumartist_musicbrainz_tags) {
             // add album artists to the list
-            foreach ($albumartist_mbid_array as $albumArtist_mbid) {
-                $album_artist_id = Artist::check_mbid($albumArtist_mbid);
-                if ($album_artist_id > 0) {
-                    $artists[] = $album_artist_id;
-                    if ($album_artist_id != $albumartist_id) {
+            foreach ($albumartist_mbid_array as $albumartist_mbid_array_item) {
+                $albumartist_id_array_item = Artist::check_mbid($albumartist_mbid_array_item);
+                if ($albumartist_id_array_item > 0) {
+                    $artists[] = $albumartist_id_array_item;
+                    if ($album_artist_id != $albumartist_id_array_item) {
                         Artist::add_artist_map($album_artist_id, 'album', $album_id);
                         Album::add_album_map($album_id, 'album', $album_artist_id);
                     }
