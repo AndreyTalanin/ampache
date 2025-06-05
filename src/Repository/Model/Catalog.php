@@ -2903,8 +2903,8 @@ abstract class Catalog extends database_object
 
         // add song artists with a valid mbid to the list
         if ($use_artist_musicbrainz_tags) {
-            foreach ($artist_mbid_array as $song_artist_mbid) {
-                $songArtist_id = Artist::check_mbid($song_artist_mbid);
+            foreach ($artist_mbid_array as $artist_mbid_array_item) {
+                $songArtist_id = Artist::check_mbid($artist_mbid_array_item);
                 if ($songArtist_id > 0 && !in_array($songArtist_id, $songArtist_array)) {
                     $songArtist_array[] = $songArtist_id;
                     Artist::add_artist_map($songArtist_id, 'song', $song->id);
@@ -2914,8 +2914,11 @@ abstract class Catalog extends database_object
 
         // add song artists found by name to the list (ignore artist names when we use MBID's)
         if (!$use_artist_musicbrainz_tags || count($artists_array) > count($artist_mbid_array)) {
-            foreach ($artists_array as $artist_name) {
-                $songArtist_id = (int)Artist::check($artist_name);
+            foreach ($artists_array as $artist_index => $artist_name) {
+                $songArtist_mbid = count($artists_array) == count($artist_mbid_array)
+                    ? $artist_mbid_array[$artist_index]
+                    : null;
+                $songArtist_id = (int)Artist::check($artist_name, $songArtist_mbid);
                 if ($songArtist_id > 0 && !in_array($songArtist_id, $songArtist_array)) {
                     $songArtist_array[] = $songArtist_id;
                     Artist::add_artist_map($songArtist_id, 'song', $song->id);
@@ -2952,8 +2955,8 @@ abstract class Catalog extends database_object
 
         // add album artists to the list
         if ($use_albumartist_musicbrainz_tags) {
-            foreach ($albumartist_mbid_array as $album_artist_mbid) {
-                $albumArtist_id = Artist::check_mbid($album_artist_mbid);
+            foreach ($albumartist_mbid_array as $albumartist_mbid_array_item) {
+                $albumArtist_id = Artist::check_mbid($albumartist_mbid_array_item);
                 if ($albumArtist_id > 0 && !in_array($albumArtist_id, $albumArtist_array)) {
                     $albumArtist_array[] = $albumArtist_id;
                     Artist::add_artist_map($albumArtist_id, 'album', $new_song->album);
