@@ -2666,6 +2666,7 @@ abstract class Catalog extends database_object
         $new_song->year    = (strlen((string)$results['year']) > 4)
             ? (int)substr((string) $results['year'], -4, 4)
             : (int)($results['year']);
+        $new_song->track        = self::check_track((string)$results['track']);
         $new_song->disk         = (Album::sanitize_disk($results['disk']) > 0) ? Album::sanitize_disk($results['disk']) : 1;
         $new_song->disksubtitle = $results['disksubtitle'] ?: null;
         $new_song->title        = self::check_length(self::check_title($results['title'], $new_song->file));
@@ -2673,6 +2674,7 @@ abstract class Catalog extends database_object
         $new_song->rate         = $results['rate'];
         $new_song->mode         = (in_array($results['mode'], ['vbr', 'cbr', 'abr'])) ? $results['mode'] : 'vbr';
         $new_song->channels     = $results['channels'];
+        $new_song->mime         = $results['mime'];
         $new_song->size         = $results['size'];
         $new_song->time         = (strlen((string)$results['time']) > 5)
             ? (int)substr((string) $results['time'], -5, 5)
@@ -2682,10 +2684,14 @@ abstract class Catalog extends database_object
             $new_song->time = $song->time;
         }
 
-        $new_song->track    = self::check_track((string)$results['track']);
-        $new_song->mbid     = (!empty($results['mb_trackid'])) ? $results['mb_trackid'] : null;
-        $new_song->composer = (!empty($results['composer'])) ? self::check_length($results['composer']) : null;
-        $new_song->mime     = $results['mime'];
+        $mb_ignore_album_tags = !empty($results['mb_ex_ignore_album_tags']) && make_bool($results['mb_ex_ignore_album_tags']);
+
+        // musicbrainz tracks belong to an album, so they should be ignored as well
+        $new_song->mbid = (!empty($results['mb_trackid']) && !$mb_ignore_album_tags)
+            ? $results['mb_trackid']
+            : null;
+
+        $new_song->composer = !empty($results['composer']) ? self::check_length($results['composer']) : null;
 
         // info for the song_data table. used in Song::update_song
         $new_song->comment = $results['comment'];
@@ -2709,7 +2715,7 @@ abstract class Catalog extends database_object
             $new_song->license = null;
         }
 
-        $new_song->label = (isset($results['publisher'])) ? self::check_length($results['publisher'], 128) : null;
+        $new_song->label = (!empty($results['publisher'])) ? self::check_length($results['publisher'], 128) : null;
         if ($song->label !== null && $song->label !== '' && $song->label !== '0' && AmpConfig::get('label')) {
             // create the label if missing
             foreach (array_map('trim', explode(';', (string) $new_song->label)) as $label_name) {
@@ -2781,10 +2787,10 @@ abstract class Catalog extends database_object
         $artist_mbid      = $results['mb_artistid'];
         $albumartist_mbid = $results['mb_albumartistid'];
         // info for the album table.
-        $album      = self::check_length($results['album']);
-        $album_mbid = $results['mb_albumid'];
+        $album            = self::check_length($results['album']);
         // year is also included in album
-        $album_mbid_group = $results['mb_albumid_group'];
+        $album_mbid       = !$mb_ignore_album_tags ? $results['mb_albumid'] : null;
+        $album_mbid_group = !$mb_ignore_album_tags ? $results['mb_albumid_group'] : null;
         $release_type     = self::check_length($results['release_type'], 32);
         $release_status   = $results['release_status'];
         $albumartist      = (empty($results['albumartist']))
