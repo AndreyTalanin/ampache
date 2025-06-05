@@ -2858,8 +2858,15 @@ SQL;
         $artist_change = false;
         $album_change  = false;
 
+        $metadata_musicbrainz_query_policy = AmpConfig::get("metadata_musicbrainz_query_policy", "always");
+
+        $use_artist_musicbrainz_tags = true;
+        $use_artist_musicbrainz_tags |= !empty($artist_mbid_array) && $metadata_musicbrainz_query_policy == "always";
+        $use_artist_musicbrainz_tags |= count($artist_mbid_array) > count($artists_array) && $metadata_musicbrainz_query_policy == "when_necessary";
+        $use_artist_musicbrainz_tags &= $metadata_musicbrainz_query_policy != "never";
+
         // add song artists with a valid mbid to the list
-        if (!empty($artist_mbid_array)) {
+        if ($use_artist_musicbrainz_tags) {
             foreach ($artist_mbid_array as $song_artist_mbid) {
                 $songArtist_id = Artist::check_mbid($song_artist_mbid);
                 if ($songArtist_id > 0 && !in_array($songArtist_id, $songArtist_array)) {
@@ -2869,8 +2876,8 @@ SQL;
             }
         }
 
-        // add song artists found by name to the list (Ignore artist names when we have the same amount of MBID's)
-        if (!empty($artists_array) && count($artists_array) > count($artist_mbid_array)) {
+        // add song artists found by name to the list (ignore artist names when we use MBID's)
+        if (!$use_artist_musicbrainz_tags || count($artists_array) > count($artist_mbid_array)) {
             foreach ($artists_array as $artist_name) {
                 $songArtist_id = (int)Artist::check($artist_name);
                 if ($songArtist_id > 0 && !in_array($songArtist_id, $songArtist_array)) {
@@ -2903,8 +2910,12 @@ SQL;
             }
         }
 
+        $use_albumartist_musicbrainz_tags = true;
+        $use_albumartist_musicbrainz_tags |= !empty($albumartist_mbid_array);
+        $use_albumartist_musicbrainz_tags &= $metadata_musicbrainz_query_policy != "never";
+
         // add album artists to the list
-        if (!empty($albumartist_mbid_array)) {
+        if ($use_albumartist_musicbrainz_tags) {
             foreach ($albumartist_mbid_array as $album_artist_mbid) {
                 $albumArtist_id = Artist::check_mbid($album_artist_mbid);
                 if ($albumArtist_id > 0 && !in_array($albumArtist_id, $albumArtist_array)) {

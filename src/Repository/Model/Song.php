@@ -368,6 +368,8 @@ class Song extends database_object implements
         $song_id = (int)Dba::insert_id();
         $artists = [$artist_id, (int)$albumartist_id];
 
+        $metadata_musicbrainz_query_policy = AmpConfig::get("metadata_musicbrainz_query_policy", "always");
+
         // map the song to catalog album and artist maps
         Catalog::update_map((int)$catalog, 'song', $song_id);
         if ($artist_id > 0) {
@@ -380,19 +382,27 @@ class Song extends database_object implements
             Album::add_album_map($album_id, 'album', (int) $albumartist_id);
         }
 
-        foreach ($artist_mbid_array as $songArtist_mbid) {
-            $song_artist_id = Artist::check_mbid($songArtist_mbid);
-            if ($song_artist_id > 0) {
-                $artists[] = $song_artist_id;
-                if ($song_artist_id != $artist_id) {
-                    Artist::add_artist_map($song_artist_id, 'song', $song_id);
-                    Album::add_album_map($album_id, 'song', $song_artist_id);
+        $use_artist_musicbrainz_tags = true;
+        $use_artist_musicbrainz_tags |= !empty($artist_mbid_array) && $metadata_musicbrainz_query_policy == "always";
+        $use_artist_musicbrainz_tags |= count($artist_mbid_array) > count($artists_array) && $metadata_musicbrainz_query_policy == "when_necessary";
+        $use_artist_musicbrainz_tags &= $metadata_musicbrainz_query_policy != "never";
+
+        if ($use_artist_musicbrainz_tags) {
+            // add song artists with a valid mbid to the list
+            foreach ($artist_mbid_array as $songArtist_mbid) {
+                $song_artist_id = Artist::check_mbid($songArtist_mbid);
+                if ($song_artist_id > 0) {
+                    $artists[] = $song_artist_id;
+                    if ($song_artist_id != $artist_id) {
+                        Artist::add_artist_map($song_artist_id, 'song', $song_id);
+                        Album::add_album_map($album_id, 'song', $song_artist_id);
+                    }
                 }
             }
         }
 
-        // add song artists found by name to the list (Ignore artist names when we have the same amount of MBID's)
-        if (!empty($artists_array) && !count($artists_array) == count($artist_mbid_array)) {
+        if (!$use_artist_musicbrainz_tags || count($artists_array) > count($artist_mbid_array)) {
+            // add song artists found by name to the list (ignore artist names when we use MBID's)
             foreach ($artists_array as $artist_name) {
                 $song_artist_id = (int)Artist::check($artist_name);
                 if ($song_artist_id > 0) {
@@ -405,13 +415,20 @@ class Song extends database_object implements
             }
         }
 
-        foreach ($albumartist_mbid_array as $albumArtist_mbid) {
-            $album_artist_id = Artist::check_mbid($albumArtist_mbid);
-            if ($album_artist_id > 0) {
-                $artists[] = $album_artist_id;
-                if ($album_artist_id != $albumartist_id) {
-                    Artist::add_artist_map($album_artist_id, 'album', $album_id);
-                    Album::add_album_map($album_id, 'album', $album_artist_id);
+        $use_albumartist_musicbrainz_tags = true;
+        $use_albumartist_musicbrainz_tags |= !empty($albumartist_mbid_array);
+        $use_albumartist_musicbrainz_tags &= $metadata_musicbrainz_query_policy != "never";
+
+        if ($use_albumartist_musicbrainz_tags) {
+            // add album artists to the list
+            foreach ($albumartist_mbid_array as $albumArtist_mbid) {
+                $album_artist_id = Artist::check_mbid($albumArtist_mbid);
+                if ($album_artist_id > 0) {
+                    $artists[] = $album_artist_id;
+                    if ($album_artist_id != $albumartist_id) {
+                        Artist::add_artist_map($album_artist_id, 'album', $album_id);
+                        Album::add_album_map($album_id, 'album', $album_artist_id);
+                    }
                 }
             }
         }
