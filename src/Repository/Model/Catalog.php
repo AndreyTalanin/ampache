@@ -2684,7 +2684,7 @@ abstract class Catalog extends database_object
             $new_song->time = $song->time;
         }
 
-        $mb_ignore_album_tags = !empty($results['mb_ex_ignore_album_tags']) && make_bool($results['mb_ex_ignore_album_tags']);
+        $mb_ignore_album_tags = !empty($results['mb_xx_ignore_album_tags']) && make_bool($results['mb_xx_ignore_album_tags']);
         $mb_ignore_artist_tags = !empty($results['mb_ex_ignore_artist_tags']) && make_bool($results['mb_ex_ignore_artist_tags']);
 
         // musicbrainz tracks belong to an album, so they should be ignored as well
