@@ -2649,7 +2649,7 @@ SQL;
         }
 
         $mb_ignore_album_tags = !empty($results['mb_xx_ignore_album_tags']) && make_bool($results['mb_xx_ignore_album_tags']);
-        $mb_ignore_artist_tags = !empty($results['mb_ex_ignore_artist_tags']) && make_bool($results['mb_ex_ignore_artist_tags']);
+        $mb_ignore_artist_tags = !empty($results['mb_xx_ignore_artist_tags']) && make_bool($results['mb_xx_ignore_artist_tags']);
 
         // musicbrainz tracks belong to an album, so they should be ignored as well
         $new_song->mbid = (!empty($results['mb_trackid']) && !$mb_ignore_album_tags)

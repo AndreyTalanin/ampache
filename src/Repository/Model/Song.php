@@ -267,7 +267,7 @@ class Song extends database_object implements
         }
 
         $mb_ignore_album_tags = !empty($results['mb_xx_ignore_album_tags']) && make_bool($results['mb_xx_ignore_album_tags']);
-        $mb_ignore_artist_tags = !empty($results['mb_ex_ignore_artist_tags']) && make_bool($results['mb_ex_ignore_artist_tags']);
+        $mb_ignore_artist_tags = !empty($results['mb_xx_ignore_artist_tags']) && make_bool($results['mb_xx_ignore_artist_tags']);
 
         $track_mbid       = !$mb_ignore_album_tags
             ? ($results['mb_trackid'] ?? $results['mbid'] ?? null)
