@@ -148,9 +148,9 @@ abstract readonly class AbstractShowAction implements ApplicationActionInterface
                 );
             }
 
-            [$filename, $objectId, $type] = $itemConfig;
+            [$filename, $object_id, $object_type] = $itemConfig;
 
-            $art      = new Art($objectId, $type, $kind);
+            $art      = new Art($object_id, $object_type, $kind);
             $has_info = $art->has_db_info($size ?: 'original');
             $has_size = $size && preg_match('/^[0-9]+x[0-9]+$/', $size);
             if (!$has_info) {
@@ -164,8 +164,8 @@ abstract readonly class AbstractShowAction implements ApplicationActionInterface
                 $defaultimg = $this->configContainer->get('custom_blankalbum');
                 if (empty($defaultimg) || (strpos($defaultimg, "http://") !== 0 && strpos($defaultimg, "https://") !== 0)) {
                     $defaultimg = ($has_size && in_array($size, ['128x128', '256x256', '384x384', '768x768']))
-                        ? $rootimg . "blankalbum_" . $size . ".png"
-                        : $rootimg . "blankalbum.png";
+                        ? $rootimg . Art::get_resized_fallback_image_filename($object_type, $size)
+                        : $rootimg . Art::get_fallback_image_filename($object_type);
                 }
                 $etag = ($has_size && in_array($size, ['128x128', '256x256', '384x384', '768x768']))
                     ? "EmptyMediaAlbum" . $size
@@ -173,7 +173,7 @@ abstract readonly class AbstractShowAction implements ApplicationActionInterface
                 $image = file_get_contents($defaultimg);
             } else {
                 // show the original image or thumbnail
-                $etag       = $type . '_' . $art->id . '_' . $size;
+                $etag       = $object_type . '_' . $art->id . '_' . $size;
                 $thumb_data = [];
                 if ($has_size) {
                     if ($art->thumb && $art->thumb_mime) {
@@ -185,7 +185,7 @@ abstract readonly class AbstractShowAction implements ApplicationActionInterface
                     // thumbs should be avoided but can still be used
                     $size_array = Art::get_thumb_size($thumb);
                     $thumb_data = $art->get_thumb($size_array);
-                    $etag       = $type . '_' . $art->id . '_thumb_' . $thumb;
+                    $etag       = $object_type . '_' . $art->id . '_thumb_' . $thumb;
                 }
 
                 $mime = (array_key_exists('thumb_mime', $thumb_data))

@@ -321,7 +321,7 @@ final class DefaultAction implements ApplicationActionInterface
             if (($external_auto_update || empty($user->city)) && !empty($auth['city'])) {
                 $user->update_city($auth['city']);
             }
-            if (($external_auto_update || strpos($user->get_f_avatar('f_avatar'), '/images/blankuser.png')) && !empty($auth['avatar'])) {
+            if (($external_auto_update || strpos($user->get_f_avatar('f_avatar'), '/images/ubuntu-yaru/user-blank-full-size.png')) && !empty($auth['avatar'])) {
                 $user->update_avatar($auth['avatar']['data'], $auth['avatar']['mime']);
             }
 

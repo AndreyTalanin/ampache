@@ -52,7 +52,7 @@ final class GetArtMethod
      *
      * id       = (string) $object_id
      * type     = (string) 'song', 'artist', 'album', 'label', 'live_stream', 'playlist', 'podcast', 'search', 'user', 'video'
-     * fallback = (integer) 0,1, if true return default art ('blankalbum.png') //optional
+     * fallback = (integer) 0,1, if true return default art ('song-blank.png', 'album-blank.png', 'playlist-blank.png', 'artist-blank.png', 'object-blank.png') //optional
      * size     = (string) width x height ('640x480', 'original') //optional
      *
      * @param array{
