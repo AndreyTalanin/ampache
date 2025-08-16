@@ -153,7 +153,8 @@ class Preference extends database_object
         'show_lyrics',
         'show_original_year',
         'show_played_times',
-        'show_playlist_media_parent',
+        'show_playlist_media_album',
+        'show_playlist_media_artist',
         'show_playlist_username',
         'show_skipped_times',
         'show_subtitle',
@@ -1355,11 +1356,14 @@ class Preference extends database_object
                 case 'browse_podcast_episode_grid_view':
                     Dba::write($pref_sql, [229, 'browse_podcast_episode_grid_view', '0', 'Force Grid View on Podcast Episode browse', AccessLevelEnum::USER->value, 'boolean', 'interface', 'cookies']);
                     break;
-                case 'show_playlist_media_parent':
-                    Dba::write($pref_sql, [230, 'show_playlist_media_parent', '0', 'Show Artist column on playlist media rows', AccessLevelEnum::USER->value, 'boolean', 'playlist', null]);
+                case 'show_playlist_media_album':
+                    Dba::write($pref_sql, [230, 'show_playlist_media_album', '0', 'Show Album column on playlist media rows', AccessLevelEnum::USER->value, 'boolean', 'playlist', null]);
+                    break;
+                case 'show_playlist_media_artist':
+                    Dba::write($pref_sql, [231, 'show_playlist_media_artist', '0', 'Show Artist column on playlist media rows', AccessLevelEnum::USER->value, 'boolean', 'playlist', null]);
                     break;
                 case 'subsonic_legacy':
-                    Dba::write($pref_sql, [231, 'subsonic_legacy', '1', 'Enable legacy Subsonic API responses for compatibility issues', AccessLevelEnum::USER->value, 'boolean', 'options', 'api']);
+                    Dba::write($pref_sql, [232, 'subsonic_legacy', '1', 'Enable legacy Subsonic API responses for compatibility issues', AccessLevelEnum::USER->value, 'boolean', 'options', 'api']);
                     break;
                 default:
                     debug_event(self::class, 'ERROR: missing preference insert code for: ' . $row['item'], 1);
@@ -1543,7 +1547,10 @@ class Preference extends database_object
             'show_lyrics' => 'Show lyrics',
             'show_original_year' => 'Show Album original year on links (if available)',
             'show_played_times' => 'Show # played',
-            'show_playlist_media_parent' => 'Show Artist column on playlist media rows',
+            // TODO: Add translations.
+            'show_playlist_media_album' => 'Show Album column on playlist media rows',
+            // TODO: Add translations.
+            'show_playlist_media_artist' => 'Show Artist column on playlist media rows',
             'show_playlist_username' => 'Show playlist owner username in titles',
             'show_skipped_times' => 'Show # skipped',
             'show_subtitle' => 'Show Album subtitle on links (if available)',
@@ -1668,26 +1675,27 @@ class Preference extends database_object
                     Dba::write(
                         "UPDATE `preference` SET `level` = ? WHERE `name` IN (" .
                         "'ajax_load', 'album_group', 'album_release_type', 'album_release_type_sort', 'album_sort'," .
-                        " 'allow_personal_info_agent', 'allow_personal_info_now', 'allow_personal_info_recent'" .
-                        " 'allow_personal_info_time', 'api_always_download', 'api_enable_3', 'api_enable_4'" .
-                        " 'api_enable_5', 'api_enable_6', 'api_force_version', 'api_hidden_playlists'" .
-                        " 'api_hide_dupe_searches', 'autoupdate_lastcheck', 'autoupdate_lastversion_new'" .
-                        " 'autoupdate_lastversion', 'bookmark_latest', 'broadcast_by_default', 'browse_filter'" .
-                        " 'browser_notify_timeout', 'browser_notify', 'custom_datetime', 'custom_logo_user'" .
-                        " 'custom_logo', 'custom_timezone', 'demo_clear_sessions', 'direct_play_limit'" .
-                        " 'geolocation', 'hide_genres', 'hide_single_artist', 'home_moment_albums', 'home_moment_videos'" .
-                        " 'home_now_playing', 'home_recently_played_all', 'home_recently_played', 'httpq_active'" .
-                        " 'index_dashboard_form', 'jp_volume', 'lastfm_challenge', 'lastfm_grant_link', 'mpd_active'" .
-                        " 'notify_email', 'of_the_moment', 'play_type', 'popular_threshold', 'show_album_artist'" .
-                        " 'show_artist', 'show_donate', 'show_license', 'show_original_year', 'show_played_times'" .
-                        " 'show_playlist_media_parent', 'show_playlist_username', 'show_skipped_times', 'show_subtitle', 'show_wrapped'" .
-                        " 'sidebar_hide_browse', 'sidebar_hide_dashboard', 'sidebar_hide_information'" .
-                        " 'sidebar_hide_playlist', 'sidebar_hide_search', 'sidebar_hide_switcher', 'sidebar_hide_video'" .
-                        " 'sidebar_light', 'sidebar_order_browse', 'sidebar_order_dashboard', 'sidebar_order_information'" .
-                        " 'sidebar_order_playlist', 'sidebar_order_search', 'sidebar_order_video', 'slideshow_time'" .
-                        " 'song_page_title', 'subsonic_always_download', 'topmenu', 'transcode_bitrate', 'transcode'" .
-                        " 'ui_fixed', 'unique_playlist', 'use_original_year', 'use_play2', 'webplayer_aurora'" .
-                        " 'webplayer_confirmclose', 'webplayer_flash', 'webplayer_html5', 'webplayer_pausetabs'" .
+                        " 'allow_personal_info_agent', 'allow_personal_info_now', 'allow_personal_info_recent'," .
+                        " 'allow_personal_info_time', 'api_always_download', 'api_enable_3', 'api_enable_4'," .
+                        " 'api_enable_5', 'api_enable_6', 'api_force_version', 'api_hidden_playlists'," .
+                        " 'api_hide_dupe_searches', 'autoupdate_lastcheck', 'autoupdate_lastversion_new'," .
+                        " 'autoupdate_lastversion', 'bookmark_latest', 'broadcast_by_default', 'browse_filter'," .
+                        " 'browser_notify_timeout', 'browser_notify', 'custom_datetime', 'custom_logo_user'," .
+                        " 'custom_logo', 'custom_timezone', 'demo_clear_sessions', 'direct_play_limit'," .
+                        " 'geolocation', 'hide_genres', 'hide_single_artist', 'home_moment_albums', 'home_moment_videos'," .
+                        " 'home_now_playing', 'home_recently_played_all', 'home_recently_played', 'httpq_active'," .
+                        " 'index_dashboard_form', 'jp_volume', 'lastfm_challenge', 'lastfm_grant_link', 'mpd_active'," .
+                        " 'notify_email', 'of_the_moment', 'play_type', 'popular_threshold'," .
+                        " 'show_playlist_media_album', 'show_playlist_media_artist', 'show_playlist_username'," .
+                        " 'show_album_artist', 'show_artist', 'show_donate', 'show_license', 'show_original_year'," .
+                        " 'show_played_times', 'show_skipped_times', 'show_subtitle', 'show_wrapped'," .
+                        " 'sidebar_hide_browse', 'sidebar_hide_dashboard', 'sidebar_hide_information'," .
+                        " 'sidebar_hide_playlist', 'sidebar_hide_search', 'sidebar_hide_switcher', 'sidebar_hide_video'," .
+                        " 'sidebar_light', 'sidebar_order_browse', 'sidebar_order_dashboard', 'sidebar_order_information'," .
+                        " 'sidebar_order_playlist', 'sidebar_order_search', 'sidebar_order_video', 'slideshow_time'," .
+                        " 'song_page_title', 'subsonic_always_download', 'topmenu', 'transcode_bitrate', 'transcode'," .
+                        " 'ui_fixed', 'unique_playlist', 'use_original_year', 'use_play2', 'webplayer_aurora'," .
+                        " 'webplayer_confirmclose', 'webplayer_flash', 'webplayer_html5', 'webplayer_pausetabs'," .
                         " 'webplayer_removeplayed'" .
                         ");",
                         [AccessLevelEnum::USER->value]
@@ -1765,10 +1773,11 @@ class Preference extends database_object
                     Dba::write(
                         "UPDATE `user_preference` SET `value` = '0' WHERE `name` IN (" .
                         "'album_sort', 'allow_upload', 'allow_video', 'api_force_version', 'api_hide_dupe_searches', 'bookmark_latest', 'broadcast_by_default', 'browse_filter'," .
-                        " 'catalog_check_duplicate', 'cron_cache', 'custom_logo_user', 'daap_backend', 'demo_clear_sessions'," .
-                        " 'demo_use_search', 'direct_play_limit', 'force_http_play', 'geolocation', 'hide_genres', 'hide_single_artist', 'home_moment_videos'," .
+                        " 'catalog_check_duplicate', 'cron_cache', 'custom_logo_user', 'daap_backend', 'demo_clear_sessions', 'demo_use_search'," .
+                        " 'direct_play_limit', 'force_http_play', 'geolocation', 'hide_genres', 'hide_single_artist', 'home_moment_videos'," .
                         " 'httpq_active', 'index_dashboard_form', 'lock_songs', 'mpd_active', 'notify_email', 'perpetual_api_session'," .
-                        " 'share', 'show_album_artist', 'show_lyrics', 'show_played_times', 'show_playlist_media_parent', 'show_playlist_username', 'show_skipped_times'," .
+                        " 'share', 'show_album_artist', 'show_lyrics', 'show_played_times', 'show_skipped_times'," .
+                        " 'show_playlist_media_album', 'show_playlist_media_artist', 'show_playlist_username'," .
                         " 'sidebar_hide_browse', 'sidebar_hide_dashboard', 'sidebar_hide_information', 'sidebar_hide_playlist'," .
                         " 'sidebar_hide_search', 'sidebar_hide_switcher', 'sidebar_hide_video', 'sidebar_light', 'slideshow_time', 'stream_beautiful_url'," .
                         " 'subsonic_always_download', 'topmenu', 'ui_fixed', 'unique_playlist', 'upload_catalog_pattern', 'upload_user_artist', 'upnp_backend'," .
@@ -1827,8 +1836,9 @@ class Preference extends database_object
                         "'album_sort', 'allow_upload', 'allow_video', 'api_force_version', 'api_hide_dupe_searches', 'bookmark_latest', 'broadcast_by_default', 'browse_filter', 'catalog_check_duplicate'," .
                         " 'cron_cache', 'custom_logo_user', 'daap_backend', 'demo_clear_sessions', 'demo_use_search', 'direct_play_limit', 'download'," .
                         " 'force_http_play', 'geolocation', 'hide_genres', 'hide_single_artist', 'home_moment_videos', 'httpq_active', 'index_dashboard_form', 'lock_songs'," .
-                        " 'mpd_active', 'notify_email', 'perpetual_api_session', 'share', 'show_album_artist', 'show_lyrics', 'show_played_times'," .
-                        " 'show_playlist_media_parent', 'show_playlist_username', 'show_skipped_times', 'show_wrapped', 'sidebar_hide_browse', 'sidebar_hide_dashboard', 'sidebar_hide_information'," .
+                        " 'mpd_active', 'notify_email', 'perpetual_api_session', 'share', 'show_album_artist', 'show_lyrics', 'show_played_times', 'show_skipped_times'," .
+                        " 'show_playlist_media_album', 'show_playlist_media_artist', 'show_playlist_username'," .
+                        " 'show_wrapped', 'sidebar_hide_browse', 'sidebar_hide_dashboard', 'sidebar_hide_information'," .
                         " 'sidebar_hide_playlist', 'sidebar_hide_search', 'sidebar_hide_switcher', 'sidebar_hide_video', 'sidebar_light', 'slideshow_time'," .
                         " 'stream_beautiful_url', 'subsonic_always_download', 'topmenu', 'ui_fixed', 'unique_playlist', 'upload_catalog_pattern', 'upload_user_artist'," .
                         " 'upnp_backend', 'use_original_year', 'use_play2', 'webdav_backend', 'webplayer_confirmclose', 'webplayer_removeplayed'," .
@@ -1886,8 +1896,9 @@ class Preference extends database_object
                         "'album_sort', 'allow_upload', 'allow_video', 'api_force_version', 'api_hide_dupe_searches', 'bookmark_latest', 'broadcast_by_default', 'browse_filter', 'catalog_check_duplicate', 'cron_cache'," .
                         " 'custom_logo_user', 'daap_backend', 'demo_clear_sessions', 'demo_use_search', 'direct_play_limit', 'download', 'force_http_play', 'geolocation'," .
                         " 'hide_genres', 'hide_single_artist', 'home_moment_videos', 'home_now_playing', 'home_recently_played_all', 'home_recently_played', 'httpq_active', 'index_dashboard_form'," .
-                        " 'lock_songs', 'mpd_active', 'notify_email', 'perpetual_api_session', 'show_album_artist', 'show_lyrics', 'show_played_times'," .
-                        " 'show_playlist_media_parent', 'show_playlist_username', 'show_skipped_times', 'show_wrapped', 'sidebar_hide_browse', 'sidebar_hide_dashboard', 'sidebar_hide_information'," .
+                        " 'lock_songs', 'mpd_active', 'notify_email', 'perpetual_api_session', 'show_album_artist', 'show_lyrics', 'show_played_times', 'show_skipped_times'," .
+                        " 'show_playlist_media_album', 'show_playlist_media_artist', 'show_playlist_username'," .
+                        " 'show_wrapped', 'sidebar_hide_browse', 'sidebar_hide_dashboard', 'sidebar_hide_information'," .
                         " 'sidebar_hide_playlist', 'sidebar_hide_search', 'sidebar_hide_switcher', 'sidebar_hide_video', 'sidebar_light', 'slideshow_time', 'stream_beautiful_url'," .
                         " 'subsonic_always_download', 'topmenu', 'ui_fixed', 'unique_playlist', 'upload_catalog_pattern', 'upload_user_artist', 'upnp_backend', 'use_original_year'," .
                         " 'use_play2', 'webdav_backend', 'webplayer_confirmclose', 'webplayer_removeplayed', 'api_always_download') AND `user` = ?;",
@@ -2118,7 +2129,8 @@ class Preference extends database_object
             'show_lyrics',
             'show_original_year',
             'show_played_times',
-            'show_playlist_media_parent',
+            'show_playlist_media_album',
+            'show_playlist_media_artist',
             'show_playlist_username',
             'show_similar',
             'show_skipped_times',
