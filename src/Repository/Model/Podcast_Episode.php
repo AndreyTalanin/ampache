@@ -269,6 +269,30 @@ class Podcast_Episode extends database_object implements
     }
 
     /**
+     * Get item get_f_album_link.
+     */
+    public function get_f_album_link(): ?string
+    {
+        return null;
+    }
+
+    /**
+     * Get item get_f_album_disk_link.
+     */
+    public function get_f_album_disk_link(): string
+    {
+        return null;
+    }
+
+    /**
+     * Get item get_f_artist_link.
+     */
+    public function get_f_artist_link(): ?string
+    {
+        return null;
+    }
+
+    /**
      * Return a formatted link to the parent object (if appliccable)
      */
     public function get_f_parent_link(): ?string
@@ -311,22 +335,6 @@ class Podcast_Episode extends database_object implements
         }
 
         return $this->podcast_link;
-    }
-
-    /**
-     * Get item get_f_album_link.
-     */
-    public function get_f_album_link(): string
-    {
-        return '';
-    }
-
-    /**
-     * Get item get_f_album_disk_link.
-     */
-    public function get_f_album_disk_link(): string
-    {
-        return '';
     }
 
     /**

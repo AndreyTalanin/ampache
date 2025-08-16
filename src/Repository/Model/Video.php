@@ -284,7 +284,31 @@ class Video extends database_object implements
     }
 
     /**
-     * Return a formatted link to the parent object (if appliccable)
+     * Get item get_f_album_link.
+     */
+    public function get_f_album_link(): ?string
+    {
+        return null;
+    }
+
+    /**
+     * Get item get_f_album_disk_link.
+     */
+    public function get_f_album_disk_link(): string
+    {
+        return null;
+    }
+
+    /**
+     * Get item get_f_artist_link.
+     */
+    public function get_f_artist_link(): ?string
+    {
+        return null;
+    }
+
+    /**
+     * Return a formatted link to the parent object (if applicable).
      */
     public function get_f_parent_link(): ?string
     {
@@ -306,22 +330,6 @@ class Video extends database_object implements
         $min_h = sprintf("%02d", ($min % 60));
 
         return $hour . ":" . $min_h . ":" . $sec;
-    }
-
-    /**
-     * Get item get_f_album_link.
-     */
-    public function get_f_album_link(): string
-    {
-        return '';
-    }
-
-    /**
-     * Get item get_f_album_disk_link.
-     */
-    public function get_f_album_disk_link(): string
-    {
-        return '';
     }
 
     /**

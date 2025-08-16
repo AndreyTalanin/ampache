@@ -131,7 +131,31 @@ class Live_Stream extends database_object implements Media, library_item, Catalo
     }
 
     /**
-     * Return a formatted link to the parent object (if appliccable)
+     * Get item get_f_album_link.
+     */
+    public function get_f_album_link(): ?string
+    {
+        return null;
+    }
+
+    /**
+     * Get item get_f_album_disk_link.
+     */
+    public function get_f_album_disk_link(): string
+    {
+        return '';
+    }
+
+    /**
+     * Get item get_f_artist_link.
+     */
+    public function get_f_artist_link(): ?string
+    {
+        return null;
+    }
+
+    /**
+     * Return a formatted link to the parent object (if applicable).
      */
     public function get_f_parent_link(): ?string
     {
@@ -142,22 +166,6 @@ class Live_Stream extends database_object implements Media, library_item, Catalo
      * Get item f_time or f_time_h.
      */
     public function get_f_time(): string
-    {
-        return '';
-    }
-
-    /**
-     * Get item get_f_album_link.
-     */
-    public function get_f_album_link(): string
-    {
-        return '';
-    }
-
-    /**
-     * Get item get_f_album_disk_link.
-     */
-    public function get_f_album_disk_link(): string
     {
         return '';
     }

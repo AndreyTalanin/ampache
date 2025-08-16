@@ -101,6 +101,8 @@ class AlbumDisk extends database_object implements library_item, CatalogItemInte
     /** @var array<int, array{id: int, name: string, is_hidden: int, count: int}> $tags */
     private ?array $tags = null;
 
+    private ?string $f_album_link = null;
+
     private ?string $f_artist_name = null;
 
     private ?string $f_artist_link = null;
@@ -374,16 +376,37 @@ class AlbumDisk extends database_object implements library_item, CatalogItemInte
     }
 
     /**
-     * Return a formatted link to the parent object (if appliccable)
+     * Get item get_f_album_link.
      */
-    public function get_f_parent_link(): ?string
+    public function get_f_album_link(): ?string
+    {
+        // don't do anything if it's formatted
+        if ($this->f_album_link === null) {
+            $this->f_album_link = $this->album->get_f_link();
+        }
+
+        return $this->f_album_link;
+    }
+
+    /**
+     * Get item get_f_artist_link.
+     */
+    public function get_f_artist_link(): ?string
     {
         // don't do anything if it's formatted
         if ($this->f_artist_link === null) {
-            $this->f_artist_link = $this->album->get_f_parent_link();
+            $this->f_artist_link = $this->album->get_f_artist_link();
         }
 
         return $this->f_artist_link;
+    }
+
+    /**
+     * Return a formatted link to the parent object (if applicable).
+     */
+    public function get_f_parent_link(): ?string
+    {
+        return $this->get_f_artist_link();
     }
 
     /**

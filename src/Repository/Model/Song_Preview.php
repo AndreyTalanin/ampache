@@ -271,9 +271,21 @@ class Song_Preview extends database_object implements Media, playable_item
     }
 
     /**
-     * Return a formatted link to the parent object (if appliccable)
+     * Get item get_f_album_link.
      */
-    public function get_f_parent_link(): ?string
+    public function get_f_album_link(): ?string
+    {
+        if ($this->f_album_link === null && $this->f_album !== null) {
+            $this->f_album_link = "<a href=\"" . AmpConfig::get_web_path() . "/albums.php?action=show_missing&mbid=" . $this->album_mbid . "&;artist=" . $this->artist . "\" title=\"" . $this->f_album . "\">" . $this->f_album . "</a>";
+        }
+
+        return $this->f_album_link;
+    }
+
+    /**
+     * Get item get_f_artist_link.
+     */
+    public function get_f_artist_link(): ?string
     {
         if ($this->artist) {
             return "<a href=\"" . AmpConfig::get_web_path() . "/artists.php?action=show&artist=" . $this->artist . "\" title=\"" . scrub_out($this->get_artist_fullname()) . "\"> " . scrub_out($this->get_artist_fullname()) . "</a>";
@@ -285,15 +297,11 @@ class Song_Preview extends database_object implements Media, playable_item
     }
 
     /**
-     * Get item get_f_album_link.
+     * Return a formatted link to the parent object (if appliccable)
      */
-    public function get_f_album_link(): ?string
+    public function get_f_parent_link(): ?string
     {
-        if ($this->f_album_link === null && $this->f_album !== null) {
-            $this->f_album_link = "<a href=\"" . AmpConfig::get_web_path() . "/albums.php?action=show_missing&mbid=" . $this->album_mbid . "&;artist=" . $this->artist . "\" title=\"" . $this->f_album . "\">" . $this->f_album . "</a>";
-        }
-
-        return $this->f_album_link;
+        return $this->get_f_artist_link();
     }
 
     /**

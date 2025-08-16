@@ -535,9 +535,17 @@ class Album extends database_object implements library_item, CatalogItemInterfac
     }
 
     /**
-     * Return a formatted link to the parent object (if appliccable)
+     * Get item get_f_album_link.
      */
-    public function get_f_parent_link(): ?string
+    public function get_f_album_link(): ?string
+    {
+        return null;
+    }
+
+    /**
+     * Get item get_f_artist_link.
+     */
+    public function get_f_artist_link(): ?string
     {
         // don't do anything if it's formatted
         if ($this->f_artist_link === null) {
@@ -569,6 +577,14 @@ class Album extends database_object implements library_item, CatalogItemInterfac
         }
 
         return $this->f_artist_link;
+    }
+
+    /**
+     * Return a formatted link to the parent object (if applicable).
+     */
+    public function get_f_parent_link(): ?string
+    {
+        return $this->get_f_artist_link();
     }
 
     /**

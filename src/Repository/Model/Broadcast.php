@@ -232,7 +232,23 @@ class Broadcast extends database_object implements library_item
     }
 
     /**
-     * Return a formatted link to the parent object (if appliccable)
+     * Get item get_f_album_link.
+     */
+    public function get_f_album_link(): ?string
+    {
+        return null;
+    }
+
+    /**
+     * Get item get_f_artist_link.
+     */
+    public function get_f_artist_link(): ?string
+    {
+        return null;
+    }
+
+    /**
+     * Return a formatted link to the parent object (if applicable).
      */
     public function get_f_parent_link(): ?string
     {

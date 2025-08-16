@@ -1741,29 +1741,6 @@ class Song extends database_object implements
     }
 
     /**
-     * Return a formatted link to the parent object (if appliccable)
-     */
-    public function get_f_parent_link(): ?string
-    {
-        // don't do anything if it's formatted
-        if ($this->f_artist_link === null) {
-            $web_path = AmpConfig::get_web_path();
-
-            $this->f_artist_link = '';
-            foreach ($this->get_artists() as $artist_id) {
-                $artist_fullname = scrub_out(Artist::get_fullname_by_id($artist_id));
-                if (!empty($artist_fullname)) {
-                    $this->f_artist_link .= "<a href=\"" . $web_path . "/artists.php?action=show&artist=" . $artist_id . "\" title=\"" . $artist_fullname . "\">" . $artist_fullname . "</a>,&nbsp";
-                }
-            }
-
-            $this->f_artist_link = rtrim($this->f_artist_link, ",&nbsp");
-        }
-
-        return $this->f_artist_link;
-    }
-
-    /**
      * Get item f_time or f_time_h.
      */
     public function get_f_time(?bool $hours = false): string
@@ -1819,7 +1796,7 @@ class Song extends database_object implements
     /**
      * Get item get_f_album_link.
      */
-    public function get_f_album_link(): string
+    public function get_f_album_link(): ?string
     {
         // don't do anything if it's formatted
         if ($this->f_album_link === null) {
@@ -1830,6 +1807,37 @@ class Song extends database_object implements
         }
 
         return $this->f_album_link ?? '';
+    }
+
+    /**
+     * Get item get_f_artist_link.
+     */
+    public function get_f_artist_link(): ?string
+    {
+        // don't do anything if it's formatted
+        if ($this->f_artist_link === null) {
+            $web_path = AmpConfig::get_web_path();
+
+            $this->f_artist_link = '';
+            foreach ($this->get_artists() as $artist_id) {
+                $artist_fullname = scrub_out(Artist::get_fullname_by_id($artist_id));
+                if (!empty($artist_fullname)) {
+                    $this->f_artist_link .= "<a href=\"" . $web_path . "/artists.php?action=show&artist=" . $artist_id . "\" title=\"" . $artist_fullname . "\">" . $artist_fullname . "</a>,&nbsp";
+                }
+            }
+
+            $this->f_artist_link = rtrim($this->f_artist_link, ",&nbsp");
+        }
+
+        return $this->f_artist_link;
+    }
+
+    /**
+     * Return a formatted link to the parent object (if applicable).
+     */
+    public function get_f_parent_link(): ?string
+    {
+        return $this->get_f_artist_link();
     }
 
     /**
