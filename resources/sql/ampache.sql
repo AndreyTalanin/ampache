@@ -1052,8 +1052,9 @@ INSERT INTO `preference` (`id`, `name`, `value`, `description`, `level`, `type`,
 (227, 'browse_video_grid_view', '0', 'Force Grid View on Video browse', 25, 'boolean', 'interface', 'cookies'),
 (228, 'browse_podcast_grid_view', '0', 'Force Grid View on Podcast browse', 25, 'boolean', 'interface', 'cookies'),
 (229, 'browse_podcast_episode_grid_view', '0', 'Force Grid View on Podcast Episode browse', 25, 'boolean', 'interface', 'cookies'),
-(230, 'show_playlist_media_parent', '0', 'Show Artist column on playlist media rows', 25, 'boolean', 'playlist', NULL),
-(231, 'subsonic_legacy', '1', 'Enable legacy Subsonic API responses for compatibility issues', 25, 'boolean', 'options', 'api');
+(230, 'show_playlist_media_album', '0', 'Show Album column on playlist media rows', 25, 'boolean', 'playlist', NULL),
+(231, 'show_playlist_media_artist', '0', 'Show Artist column on playlist media rows', 25, 'boolean', 'playlist', NULL),
+(232, 'subsonic_legacy', '1', 'Enable legacy Subsonic API responses for compatibility issues', 25, 'boolean', 'options', 'api');
 
 -- --------------------------------------------------------
 
@@ -1799,7 +1800,8 @@ INSERT INTO `user_preference` (`user`, `preference`, `name`, `value`) VALUES
 (-1, 227, 'browse_video_grid_view', '0'),
 (-1, 228, 'browse_podcast_grid_view', '0'),
 (-1, 229, 'browse_podcast_episode_grid_view', '0'),
-(-1, 230, 'show_playlist_media_parent', '0');
+(-1, 230, 'show_playlist_media_album', '0'),
+(-1, 231, 'show_playlist_media_artist', '0');
 
 -- --------------------------------------------------------
 
