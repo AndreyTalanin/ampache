@@ -727,8 +727,10 @@ class Artist extends database_object implements library_item, CatalogItemInterfa
             return null;
         }
 
+        $metadata_musicbrainz_query_policy = AmpConfig::get("metadata_musicbrainz_query_policy", "always");
+
         // prefer the name of the artist as provided by MusicBrainz
-        if ($mbid !== null && $mbid !== '' && $mbid !== '0') {
+        if ($mbid !== null && $mbid !== '' && $mbid !== '0' && $metadata_musicbrainz_query_policy == "always") {
             $plugin      = new Plugin('musicbrainz');
             $parsed_mbid = VaInfo::parse_mbid($mbid);
             $data        = $plugin->_plugin->get_artist($parsed_mbid);
