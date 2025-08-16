@@ -277,7 +277,7 @@ div#autoupdate > span {
 #header {
     z-index: 5;
     height: 64px;
-    padding: 0 5px;
+    padding: 0 8px;
     font-size: 15px;
 }
 
@@ -307,6 +307,8 @@ div#autoupdate > span {
 }
 
 #header #headerlogo {
+    display: flex;
+    align-items: center;
     float: left;
     width: 20%;
 }
@@ -317,8 +319,8 @@ div#autoupdate > span {
 }
 
 #header #headerlogo img {
-    height: 64px;
-    width: 64px;
+    height: 48px;
+    width: 48px;
 }
 
 #mobileheader {
@@ -383,7 +385,7 @@ div#autoupdate > span {
 
 #loginInfo {
     position: absolute;
-    left: 74px; /* 5px header padding + 64px logo size + 5px offset */
+    left: 64px; /* 8px header padding + 48px logo size + 8px offset */
 }
 
 #sb_Subsearch input[type=submit] {
