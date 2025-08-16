@@ -77,6 +77,11 @@ class Browse extends Query
         'wanted',
     ];
 
+    private const BROWSE_CONTAINER_TYPES = [
+        'album' => [],
+        'playlist' => ['numbered' => true],
+    ];
+
     public ?int $duration = null;
 
     public function __construct(
@@ -189,6 +194,15 @@ class Browse extends Query
     public static function is_valid_type(string $type): bool
     {
         return in_array($type, self::BROWSE_TYPES);
+    }
+
+    /**
+     * is_valid_container_type
+     * Validate the browse belongs to a container object of a type that is supported
+     */
+    public static function is_valid_container_type(string $container_type): bool
+    {
+        return in_array($container_type, self::BROWSE_CONTAINER_TYPES);
     }
 
     /**
@@ -606,6 +620,91 @@ class Browse extends Query
         } else {
             debug_event(self::class, 'set_type invalid type: ' . $type, 5);
         }
+    }
+
+    /**
+     * This sets the type and id of a parent object containing the current browse
+     */
+    public function set_container(string $container_type, int $container_id): void
+    {
+        if (empty($container_type)) {
+            return;
+        }
+        if (empty($container_id)) {
+            return;
+        }
+
+        if (self::is_valid_type($container_type)) {
+            $this->_state['browse_container_type'] = $container_type;
+        } else {
+            debug_event(self::class, 'set_container invalid type: ' . $container_type, 5);
+            return;
+        }
+
+        if ($container_id > 0) {
+            $this->_state['browse_container_id'] = $container_id;
+        } else {
+            debug_event(self::class, 'set_container invalid value: ' . $container_id, 5);
+            return;
+        }
+    }
+
+    /**
+     * is_container_set
+     * This returns a value indicating whether a parent object containing the current browse is specified
+     */
+    public function is_container_set(): bool
+    {
+        if (!in_array('browse_container_type', $this->_state) || !in_array('browse_container_id', $this->_state)) {
+            return false;
+        }
+        
+        return !empty($this->_state['browse_container_type']) && !empty($this->_state['browse_container_id']);
+    }
+
+    /**
+     * is_container_numbered
+     * This returns a value indicating whether a parent object containing the current browse is unidimentionally numbered (e.g. a playlist)
+     */
+    public function is_container_numbered(): ?bool
+    {
+        if (!$this->is_container_set()) {
+            return null;
+        }
+
+        $details = self::BROWSE_CONTAINER_TYPES[$this->get_container_type()];
+
+        if (empty($details) || !is_array($details) || !in_array('numbered', $details)) {
+            return false;
+        }
+
+        return $details['numbered'];
+    }
+
+    /**
+     * get_container_type
+     * This returns the type of a parent object containing the current browse
+     */
+    public function get_container_type(): ?string
+    {
+        if (!in_array('browse_container_type', $this->_state)) {
+            return null;
+        }
+
+        return $this->_state['browse_container_type'];
+    }
+
+    /**
+     * get_container_id
+     * This returns the id of a parent object containing the current browse
+     */
+    public function get_container_id(): ?int
+    {
+        if (!in_array('browse_container_id', $this->_state)) {
+            return null;
+        }
+
+        return $this->_state['browse_container_id'];
     }
 
     /**

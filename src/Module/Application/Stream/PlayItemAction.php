@@ -93,6 +93,24 @@ final class PlayItemAction extends AbstractStreamAction
         }
 
         $mediaIds  = [];
+
+        if (array_key_exists('subobject_type', $_REQUEST) && array_key_exists('subobject_id', $_REQUEST)) {
+            $subobjectType = LibraryItemEnum::tryFrom($_REQUEST['subobject_type']);
+            $subobjectIds = explode(',', $_REQUEST['subobject_id']);
+
+            if (count($subobjectIds) > 0) {
+                $subobjectId = $subobjectIds[0];
+            }
+        }
+
+        if (isset($subobjectType, $subobjectId) && array_key_exists('subobject_number', $_REQUEST)) {
+            $subobjectNumbers = explode(',', $_REQUEST['subobject_number']);
+
+            if (count($subobjectNumbers) > 0) {
+                $subobjectNumber = $subobjectNumbers[0];
+            }
+        }
+
         foreach ($objectIds as $object_id) {
             $item = $this->libraryItemLoader->load(
                 $objectType,
@@ -102,14 +120,29 @@ final class PlayItemAction extends AbstractStreamAction
             if ($item !== null) {
                 $mediaIds = array_merge($mediaIds, $item->get_medias());
 
+                if (isset($subobjectType, $subobjectId)) {
+                    foreach ($mediaIds as &$mediaId) {
+                        if (is_array($mediaId)) {
+                            ['object_type' => $mediaObjectType, 'object_id' => $mediaObjectId, 'track' => $mediaTrack] =
+                                array_merge(['object_type' => null, 'object_id' => null, 'track' => null], $mediaId);
+
+                            if ($mediaObjectType == $subobjectType && $mediaObjectId == $subobjectId && ($mediaTrack == $subobjectNumber || empty($subobjectNumber))) {
+                                $mediaId['custom_play_initial_position'] = true;
+                            }
+                        }
+                    }
+                }
+
                 if (array_key_exists('custom_play_action', $_REQUEST)) {
-                    foreach ($mediaIds as $mediaId) {
+                    foreach ($mediaIds as &$mediaId) {
                         if (is_array($mediaId)) {
                             $mediaId['custom_play_action'] = $_REQUEST['custom_play_action'];
                         }
                     }
                 }
+
                 $user = $gatekeeper->getUser();
+
                 // record this as a 'play' to help show usage and history for playlists and streams
                 if (
                     $user !== null &&

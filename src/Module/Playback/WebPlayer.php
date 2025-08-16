@@ -333,6 +333,11 @@ class WebPlayer
                 $json['r128_track_gain']       = $media->r128_track_gain;
                 $json['r128_album_gain']       = $media->r128_album_gain;
                 $json['duration']              = $media->time;
+
+                // get a flag indicating whether playback should start from this item
+                if (!empty($url_data['custom_play_initial_position']) && make_bool($url_data['custom_play_initial_position'])) {
+                    $json['custom_play_initial_position'] = true;
+                }
             }
             $json['media_id']   = $media->id;
             $json['media_type'] = $url_data['type'];

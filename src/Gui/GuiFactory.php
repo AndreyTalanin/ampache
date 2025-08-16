@@ -36,6 +36,8 @@ use Ampache\Gui\Playlist\NewPlaylistDialogAdapter;
 use Ampache\Gui\Playlist\NewPlaylistDialogAdapterInterface;
 use Ampache\Gui\Playlist\PlaylistViewAdapter;
 use Ampache\Gui\Playlist\PlaylistViewAdapterInterface;
+use Ampache\Gui\Song\SongDirectplayOptionsViewAdapter;
+use Ampache\Gui\Song\SongDirectplayOptionsViewAdapterInterface;
 use Ampache\Gui\Song\SongViewAdapter;
 use Ampache\Gui\Song\SongViewAdapterInterface;
 use Ampache\Gui\Stats\CatalogStats;
@@ -87,7 +89,36 @@ final readonly class GuiFactory implements GuiFactoryInterface
             $this->configContainer,
             $this->modelFactory,
             $gatekeeper,
+            null,
             $song
+        );
+    }
+
+    public function createSongBrowsedViewAdapter(
+        GuiGatekeeperInterface $gatekeeper,
+        Browse $browse,
+        Song $song
+    ): SongViewAdapterInterface {
+        return new SongViewAdapter(
+            $this->configContainer,
+            $this->modelFactory,
+            $gatekeeper,
+            $browse,
+            $song
+        );
+    }
+
+    public function createSongDirectplayOptionsViewAdapter(): SongDirectplayOptionsViewAdapterInterface {
+        return new SongDirectplayOptionsViewAdapter(
+            $this->configContainer,
+            null
+        );
+    }
+
+    public function createSongBrowsedDirectplayOptionsViewAdapter(?Browse $browse): SongDirectplayOptionsViewAdapterInterface {
+        return new SongDirectplayOptionsViewAdapter(
+            $this->configContainer,
+            $browse
         );
     }
 

@@ -25,7 +25,7 @@
     <dt>Action</dt>
     <dd>
         <tal:block tal:condition="CONFIG/isDirectplayEnabled">
-            <tal:block tal:replace="structure SONG/getDirectPlayButton">DIRECTPLAY BUTTON</tal:block>
+            <tal:block tal:replace="structure SONG/getDirectplayButton">DIRECTPLAY BUTTON</tal:block>
             <tal:block tal:condition="SONG/canAutoplayNext">
                 <tal:block tal:replace="structure SONG/getAutoplayNextButton">AUTOPLAY NEXT BUTTON</tal:block>
             </tal:block>

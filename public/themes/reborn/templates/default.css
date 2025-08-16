@@ -1065,8 +1065,8 @@ table.tabledata .th-bottom:focus {
 }
 
 table.tabledata tbody .cel_play {
-    max-width: 60px;
-    min-width: 60px;
+    max-width: 85px;
+    min-width: 85px;
     width: 40px !important;
     text-align: right;
 }
@@ -1122,8 +1122,8 @@ table.tabledata tbody .cel_time {
 }
 
 table.tabledata tbody .cel_action {
-    width: 90px !important;
-    max-width: 90px;
+    width: 105px !important;
+    max-width: 105px;
 }
 
 table.tabledata tbody .cel_action_text {
