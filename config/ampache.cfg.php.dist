@@ -467,6 +467,23 @@ catalog_prefix_pattern = "The|An|A|Die|Das|Ein|Eine|Les|Le|La"
 ; DEFAULT: #FF0000
 ;waveform_color = "#FF0000"
 
+; Waveform color customization
+; Whether to use custom per-theme waveform colors.
+; This settings requires waveform_store_disk to also be turned on.
+; DEFAULT: "false"
+;waveform_color_use_themes = "true"
+
+; Waveform theme-specific colors
+; Configures different waveform colors for themes and their colors.
+; If no override found, defaults to waveform_color.
+; waveform_color_override_THEMENAME_THEMECOLOR = HTMLCOLOR
+; Note: possible values below list the default theme and its colors only,
+; but it should theoretically work with custom themes as well.
+; POSSIBLE THEMENAME VALUES: reborn
+; POSSIBLE THEMECOLOR VALUES: dark, light
+;waveform_color_override_reborn_dark = "#FF9D00"
+;waveform_color_override_reborn_light = "#1990DB"
+
 ; Waveform height
 ; The waveform height.
 ; DEFAULT: 32
@@ -634,6 +651,13 @@ sociable = "true"
 ; a local folder that is not accessible from a browser.
 ; DEFAULT: "false"
 ;album_art_store_disk = "true"
+
+; Waveform Store on Disk
+; This defines if waveforms should be stored on disk instead of database.
+; You must also set a local_metadata_dir below. This folder should be
+; a local folder that is not accessible from a browser.
+; DEFAULT: "false"
+;waveform_store_disk = "true"
 
 ; Local Metadata Directory
 ; This define a local metadata directory OUTSIDE the web path with write access.

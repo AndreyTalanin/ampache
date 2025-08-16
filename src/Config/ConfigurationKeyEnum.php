@@ -215,6 +215,8 @@ final class ConfigurationKeyEnum
     public const USE_RSS                               = 'use_rss';
     public const VERSION                               = 'version';
     public const WAVEFORM                              = 'waveform';
+    public const WAVEFORM_COLOR_USE_THEMES             = 'waveform_color_use_themes';
+    public const WAVEFORM_STORE_DISK                   = 'waveform_store_disk';
     public const WEB_PATH                              = 'web_path';
     public const WRITE_TAGS                            = 'write_tags';
     public const ALBUM_ART_STORE_DISK                  = 'album_art_store_disk';
