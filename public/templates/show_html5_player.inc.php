@@ -272,7 +272,7 @@ echo implode(',', $solutions); ?>",
                                 $shoutLink = AmpConfig::get('sociable') && Access::check(AccessTypeEnum::INTERFACE, AccessLevelEnum::USER);
                                 echo "var waveformobj = '';";
                                 if ($shoutLink) {
-                                    echo "waveformobj += '<a href=\"#\" title=\"" . addslashes(T_('Double click to post a new shout')) . "\" onClick=\"javascript:WaveformClick(' + currentjpitem.attr('data-media_id') + ', ClickTimeOffset(event));\">';";
+                                    echo "waveformobj += '<a href=\"#\" title=\"" . addslashes(T_('Double click to post a new shout')) . "\" onClick=\"javascript:WaveformClick(' + currentjpitem.attr('data-media_id') + ', ClickTimeOffset(event));return false;\">';";
                                 }
                                 echo "waveformobj += '<div class=\"waveform-shouts\"></div>';";
                                 echo "waveformobj += '<div class=\"waveform-time\"></div><img src=\"" . $web_path . "/waveform.php?' + currentobject + '=' + currentjpitem.attr('data-media_id') + '\" onLoad=\"ShowWaveform();\">';";
