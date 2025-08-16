@@ -54,7 +54,17 @@ interface playable_item
     public function get_f_link(): string;
 
     /**
-     * Return a formatted link to the parent object (if appliccable)
+     * Return a formatted link to the album (if applicable; used for extended playlist view).
+     */
+    public function get_f_album_link(): ?string;
+
+    /**
+     * Return a formatted link to the artist (if applicable; used for extended playlist view).
+     */
+    public function get_f_artist_link(): ?string;
+
+    /**
+     * Return a formatted link to the parent object (if applicable).
      */
     public function get_f_parent_link(): ?string;
 
