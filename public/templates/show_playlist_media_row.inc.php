@@ -26,6 +26,7 @@ declare(strict_types=0);
 use Ampache\Config\AmpConfig;
 use Ampache\Module\Authorization\AccessLevelEnum;
 use Ampache\Module\Authorization\AccessTypeEnum;
+use Ampache\Repository\Model\LibraryItemEnum;
 use Ampache\Repository\Model\Playlist;
 use Ampache\Repository\Model\Rating;
 use Ampache\Repository\Model\Share;
@@ -46,7 +47,8 @@ use Ampache\Module\Util\Ui;
 /** @var string $cel_time */
 /** @var bool $show_ratings */
 /** @var bool $extended_links */
-/** @var bool $show_parent */
+/** @var bool $show_playlist_media_album */
+/** @var bool $show_playlist_media_artist */
 /** @var string $t_play */
 /** @var string $t_play_next */
 /** @var string $t_play_last */
@@ -61,7 +63,12 @@ if (!isset($libitem->enabled) || $libitem->enabled || Access::check(AccessTypeEn
     $thumb = (isset($browse) && $browse->is_grid_view())
         ? ['width' => 150, 'height' => 150]
         : ['width' => 80, 'height' => 80];
-    $link = ($extended_links && !empty($libitem->get_f_parent_link()))
+    $parent = $libitem->get_parent();
+    $parent_type = !empty($parent) && !empty($parent['object_type'])
+        ? $parent['object_type']
+        : null;
+    $hide_parent_link = $parent_type == LibraryItemEnum::ARTIST && $show_playlist_media_artist;
+    $link = ($extended_links && !$hide_parent_link && !empty($libitem->get_f_parent_link()))
         ? $libitem->get_f_link() . '&nbsp;-&nbsp;' . $libitem->get_f_parent_link()
         : $libitem->get_f_link(); ?>
 <td class="cel_play">
@@ -115,8 +122,11 @@ if (!isset($libitem->enabled) || $libitem->enabled || Access::check(AccessTypeEn
 </div>
 </td>
 <td class="cel_title"><?php echo $link; ?></td>
-<?php if ($show_parent) { ?>
-<td class="cel_artist"><?php echo $libitem->get_f_parent_link(); ?></td>
+<?php if ($show_playlist_media_album) { ?>
+<td class="cel_album"><?php echo $libitem->get_f_album_link(); ?></td>
+<?php } ?>
+<?php if ($show_playlist_media_artist) { ?>
+<td class="cel_artist"><?php echo $libitem->get_f_artist_link(); ?></td>
 <?php } ?>
 <td class="cel_add">
     <span class="cel_item_add">

@@ -42,14 +42,15 @@ $libraryItemLoader = $dic->get(LibraryItemLoaderInterface::class);
 $web_path = AmpConfig::get_web_path();
 
 // playlists and searches come from the same 'playlist_media' browse but you can't reorder a search
-$playlist_id    = $playlist->id ?? '';
-$seconds        = $browse->duration;
-$duration       = ($browse->duration === null) ? '' : floor($seconds / 3600) . gmdate(":i:s", $seconds % 3600);
-$show_ratings   = User::is_registered() && (AmpConfig::get('ratings'));
-$hide_genres    = AmpConfig::get('hide_genres');
-$show_parent    = AmpConfig::get('show_playlist_media_parent', false);
-$extended_links = AmpConfig::get('extended_playlist_links', false);
-$is_table       = !$browse->is_grid_view();
+$playlist_id                = $playlist->id ?? '';
+$seconds                    = $browse->duration;
+$duration                   = ($browse->duration === null) ? '' : floor($seconds / 3600) . gmdate(":i:s", $seconds % 3600);
+$show_ratings               = User::is_registered() && (AmpConfig::get('ratings'));
+$hide_genres                = AmpConfig::get('hide_genres');
+$show_playlist_media_album  = AmpConfig::get('show_playlist_media_album', false);
+$show_playlist_media_artist = AmpConfig::get('show_playlist_media_artist', false);
+$extended_links             = AmpConfig::get('extended_playlist_links', false);
+$is_table                   = !$browse->is_grid_view();
 // mashup and grid view need different css
 $cel_cover = ($is_table) ? "cel_cover" : 'grid_cover';
 $cel_time  = ($is_table) ? "cel_time" : 'grid_time';
@@ -59,6 +60,7 @@ $count     = 1;
 $t_duration = T_('Duration');
 $t_art      = T_('Art');
 $t_title    = T_('Title');
+$t_album    = T_('Album');
 $t_artist   = T_('Artist');
 $t_time     = T_('Time');
 $t_rating   = T_('Rating');
@@ -86,7 +88,10 @@ if ($browse->is_show_header()) {
                 <th class="cel_play essential">#</th>
                 <th class="<?php echo $cel_cover; ?> optional"><?php echo $t_art; ?></th>
                 <th class="cel_title essential persist"><?php echo $t_title; ?></th>
-                <?php if ($show_parent) { ?>
+                <?php if ($show_playlist_media_album) { ?>
+                <th class="cel_album essential persist"><?php echo $t_album; ?></th>
+                <?php } ?>
+                <?php if ($show_playlist_media_artist) { ?>
                 <th class="cel_artist essential persist"><?php echo $t_artist; ?></th>
                 <?php } ?>
                 <th class="cel_add essential"></th>
@@ -126,7 +131,10 @@ if ($browse->is_show_header()) {
                 <th class="cel_play"><?php echo T_('Play'); ?></th>
                 <th class="<?php echo $cel_cover; ?>"><?php echo $t_art; ?></th>
                 <th class="cel_title"><?php echo $t_title; ?></th>
-                <?php if ($show_parent) { ?>
+                <?php if ($show_playlist_media_album) { ?>
+                <th class="cel_album essential persist"><?php echo $t_album; ?></th>
+                <?php } ?>
+                <?php if ($show_playlist_media_artist) { ?>
                 <th class="cel_artist essential persist"><?php echo $t_artist; ?></th>
                 <?php } ?>
                 <th class="cel_add"></th>
